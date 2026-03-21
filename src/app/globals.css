@@ -1,0 +1,151 @@
+@import "tailwindcss";
+
+/* ========================================
+   SAFETAFI DESIGN SYSTEM - Tailwind v4
+   ======================================== */
+@theme {
+  /* Brand Colors */
+  --color-primary: #0047BB;
+  --color-primary-dark: #003494;
+  --color-accent: #FF8C00;
+  --color-accent-dark: #CC6F00;
+  --color-brand-dark: #0B0E14;
+  --color-brand-gray: #F4F7FA;
+  --color-brand-navy: #001B44;
+
+  /* Typography */
+  --font-sans: "Public Sans", sans-serif;
+
+  /* Border Radius */
+  --radius-xl: 0.75rem;
+  --radius-2xl: 1rem;
+  --radius-3xl: 1.5rem;
+
+  /* Animations */
+  --animate-fade-in-up: fadeInUp 0.8s ease-out forwards;
+  --animate-float: float 3s ease-in-out infinite;
+  --animate-ping-slow: ping 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+
+  @keyframes fadeInUp {
+    0% {
+      opacity: 0;
+      transform: translateY(24px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-12px); }
+  }
+}
+
+/* ========================================
+   BASE STYLES
+   ======================================== */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: #ffffff;
+  color: #0f172a;
+  font-family: "Public Sans", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ========================================
+   CUSTOM COMPONENT CLASSES
+   ======================================== */
+
+.glass-nav {
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+}
+
+.hero-gradient {
+  background: linear-gradient(
+    135deg,
+    rgba(11, 14, 20, 0.96) 0%,
+    rgba(0, 71, 187, 0.42) 100%
+  );
+}
+
+.service-card {
+  background: #ffffff;
+  padding: 2rem;
+  border-radius: 1.5rem;
+  border: 1px solid rgba(241, 245, 249, 1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.service-card:hover {
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.18);
+  transform: translateY(-8px);
+}
+
+.nav-link {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #475569;
+  transition: color 0.2s;
+  position: relative;
+  padding-bottom: 4px;
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: #0047BB;
+  transition: width 0.3s ease;
+}
+
+.nav-link:hover {
+  color: #0047BB;
+}
+
+.nav-link:hover::after {
+  width: 100%;
+}
+
+/* Material Symbols */
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+.material-symbols-outlined.fill-1 {
+  font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+/* Scroll-triggered fade animations */
+.animate-fade-in-up {
+  animation: fadeInUp 0.8s ease-out forwards;
+  opacity: 0;
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+::-webkit-scrollbar-thumb {
+  background: #0047BB;
+  border-radius: 999px;
+}

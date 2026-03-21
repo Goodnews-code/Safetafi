@@ -1,0 +1,43 @@
+import type { Metadata } from "next";
+import { Public_Sans } from "next/font/google";
+import "./globals.css";
+
+const publicSans = Public_Sans({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700", "800", "900"],
+  variable: "--font-public-sans",
+  display: "swap",
+});
+
+export const metadata: Metadata = {
+  title: "SAFETAFI | Trusted Nigerian Transport & Logistics Solutions",
+  description:
+    "From Lagos to Kano, SAFETAFI bridges the gap between businesses and markets with end-to-end transport solutions designed for the modern economy. Reliable, safe, and trackable.",
+  keywords: "Nigeria logistics, transport Nigeria, road haulage, vehicle hire, supply chain Nigeria, SAFETAFI",
+  openGraph: {
+    title: "SAFETAFI | Trusted Nigerian Transport & Logistics Solutions",
+    description:
+      "Redefining Nigerian logistics through transparency, technology, and trust.",
+    type: "website",
+  },
+};
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return (
+    <html lang="en" className="scroll-smooth">
+      <head>
+        <link
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap"
+        />
+      </head>
+      <body className={`${publicSans.variable} font-sans antialiased`}>
+        {children}
+      </body>
+    </html>
+  );
+}
