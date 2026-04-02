@@ -29,7 +29,7 @@ export default function AdminActions({ transactions }: AdminActionsProps) {
       // Map transaction data to rows
       const rows = transactions.map(tr => [
         `"${tr.customer_name || 'Anonymous'}"`,
-        `"${tr.service || 'Logistics'}"`,
+        `"${tr.service || 'Service'}"`,
         `"${tr.date || 'N/A'}"`,
         tr.amount || 0,
         tr.status?.toUpperCase() || 'UNKNOWN',
