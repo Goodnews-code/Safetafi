@@ -37,6 +37,12 @@ const SERVICE_OPTIONS = [
     icon: "location_on",
   },
   {
+    id: "ikorodu",
+    label: "Ikorodu",
+    amount: 12000,
+    icon: "location_on",
+  },
+  {
     id: "custom",
     label: "Custom / Quote",
     amount: 0,
