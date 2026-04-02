@@ -278,13 +278,20 @@ export default function CheckoutPortal() {
                     >
                       Back
                     </button>
-                    <button 
-                      onClick={handlePay}
-                      className="flex-[2] bg-[#100287] text-white py-5 rounded-2xl font-black text-lg hover:bg-[#030301] transition-all shadow-xl shadow-blue-600/30 flex items-center justify-center gap-3"
-                    >
-                      <span className="material-symbols-outlined">lock</span>
-                      Pay Securely
-                    </button>
+                    {!publicKey ? (
+                      <div className="flex-1 bg-amber-50 border border-amber-200 p-4 rounded-2xl flex flex-col items-center gap-2 text-center animate-pulse">
+                         <span className="material-symbols-outlined text-amber-600">settings_suggest</span>
+                         <p className="text-[10px] font-black text-amber-700 uppercase tracking-widest">Configuration Error: PAYSTACK_PUBLIC_KEY Missing on Netlify</p>
+                      </div>
+                    ) : (
+                      <button 
+                        onClick={handlePay}
+                        className="flex-[2] bg-[#100287] text-white py-5 rounded-2xl font-black text-lg hover:bg-[#030301] transition-all shadow-xl shadow-blue-600/30 flex items-center justify-center gap-3"
+                      >
+                        <span className="material-symbols-outlined">lock</span>
+                        Pay Securely
+                      </button>
+                    )}
                  </div>
                )}
             </div>
