@@ -1,6 +1,7 @@
 import { getSupabase } from "@/lib/supabase";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import AdminActions from "./AdminActions";
 
 // Force Dynamic so it fetches fresh transactions every time the page is loaded
 export const dynamic = "force-dynamic";
@@ -133,18 +134,7 @@ export default async function AdminDashboard() {
               Monitor your latest business revenue and bookings in real-time.
             </p>
           </div>
-          <div className="flex items-center gap-3">
-             <button
-               className="bg-white text-slate-600 px-6 py-3 rounded-xl font-bold shadow-sm border border-slate-200 hover:bg-slate-50 transition-all flex items-center gap-2"
-             >
-               <span className="material-symbols-outlined text-xl">sync</span>
-               Refresh Data
-             </button>
-             <button className="bg-[#0047BB] text-white px-6 py-3 rounded-xl font-black shadow-lg shadow-blue-600/20 hover:bg-[#001B44] transition-all flex items-center gap-2">
-               <span className="material-symbols-outlined text-xl">download</span>
-               Export CSV
-             </button>
-          </div>
+          <AdminActions transactions={transactions || []} />
         </header>
 
         {/* Statistics Cards */}
