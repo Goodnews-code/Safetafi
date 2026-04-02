@@ -43,10 +43,10 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Payment is verified
+    // Payment is verified — now save to Supabase
     const transaction = data.data;
 
-    // 1. Save payment record to your database
+    // 1. Map metadata fields
     const metadataFields = transaction.metadata?.custom_fields || [];
     const getMetaValue = (key: string) => metadataFields.find((f: any) => f.variable_name === key)?.value || "";
     
@@ -58,12 +58,13 @@ export async function POST(req: NextRequest) {
       phone: getMetaValue("phone"),
       customer_name: getMetaValue("name"),
       service: getMetaValue("service"),
-      date: getMetaValue("date"), // NEW: Mapping the scheduled date
+      date: getMetaValue("date"),
       description: getMetaValue("description"),
       status: transaction.status,
       paid_at: transaction.paid_at,
     };
 
+    // 2. Insert into Supabase
     const { error: dbError } = await supabase
       .from("transactions")
       .insert([dbTransaction]);
