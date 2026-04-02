@@ -1,4 +1,4 @@
-import { supabase } from "@/lib/supabase";
+import { getSupabase } from "@/lib/supabase";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
@@ -21,6 +21,7 @@ export default async function AdminDashboard() {
     redirect("/admin");
   }
   // 1. Fetch transactions directly from Supabase (Server-side)
+  const supabase = getSupabase();
   const { data: transactions, error } = await supabase
     .from("transactions")
     .select("*")
