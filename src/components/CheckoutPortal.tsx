@@ -148,7 +148,7 @@ export default function CheckoutPortal() {
           <div className="mb-10 text-center">
              <img src="/logo.svg" alt="Safetafi" className="h-10 mx-auto mb-4" />
              <h2 className="text-3xl font-black text-slate-900 tracking-tight">
-               {step === 'form' && "Logistics Booking"}
+               {step === 'form' && "Book Your Express Service"}
                {step === 'confirm' && "Review & Pay"}
                {step === 'success' && "Transaction Complete"}
                {step === 'failed' && "Payment Error"}

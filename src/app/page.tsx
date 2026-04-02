@@ -43,7 +43,7 @@ export default function Home() {
               </div>
            </div>
            <h1 className="text-5xl md:text-7xl font-black text-slate-900 tracking-tighter mb-4 leading-[0.9] max-w-4xl mx-auto uppercase">
-             Transport and <span className="text-[#100287]">Service Network</span>
+             Transport and <span className="text-[#100287]">Logistics Network</span>
            </h1>
            <p className="text-2xl text-[#F27308] font-black max-w-lg mx-auto tracking-widest uppercase opacity-90 mt-2">
              Safety, Comfort and Affordability

@@ -190,7 +190,7 @@ export default async function AdminDashboard() {
                </h3>
             </div>
             <p className="text-xs text-slate-400 mt-4 leading-relaxed">
-               Average value per successful service booking.
+               Average value per successful logistics booking.
             </p>
           </div>
         </div>

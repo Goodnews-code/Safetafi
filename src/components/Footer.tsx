@@ -26,7 +26,7 @@ export default function Footer() {
               Redefining the movement of people and goods through transparency, 
               technology, and trust. Safetafi empowers businesses to reach further 
               and individuals to travel safer, faster, and more affordably. 
-              We are your comprehensive Transport and Service Network.
+              We are your comprehensive Transport and Logistics Network.
             </p>
           </div>
 
@@ -37,7 +37,7 @@ export default function Footer() {
           
           <div className="flex flex-col gap-2 items-center md:items-start text-center md:text-left">
              <p className="text-slate-500 text-sm font-black tracking-[0.25em] uppercase">
-               © {currentYear} SAFETAFI Transport &amp; Service Network
+               © {currentYear} SAFETAFI Transport &amp; Logistics Network
              </p>
              <p className="text-[#F27308] text-xs font-black uppercase tracking-[0.4em]">
                HQ: Ile-Ife, Nigeria • Verified Operations
