@@ -289,7 +289,7 @@ export default async function AdminDashboard() {
                   ))
                 ) : (
                   <tr>
-                    <td colSpan={5} className="px-8 py-32 text-center text-slate-400 font-bold italic bg-slate-50/20">
+                    <td colSpan={6} className="px-8 py-32 text-center text-slate-400 font-bold italic bg-slate-50/20">
                        <div className="flex flex-col items-center gap-4">
                           <div className="w-16 h-16 bg-white rounded-2xl shadow-lg border border-slate-100 flex items-center justify-center animate-bounce">
                              <span className="material-symbols-outlined text-4xl text-slate-200">folder_open</span>
