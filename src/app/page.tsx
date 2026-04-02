@@ -1,7 +1,12 @@
 "use client";
 
-import CheckoutPortal from "@/components/CheckoutPortal";
+import dynamic from "next/dynamic";
 import Footer from "@/components/Footer";
+
+const CheckoutPortal = dynamic(() => import("@/components/CheckoutPortal"), { 
+  ssr: false,
+  loading: () => <div className="w-full max-w-xl h-[600px] bg-white/50 animate-pulse rounded-[3rem] mx-auto" />
+});
 
 export default function Home() {
   return (
