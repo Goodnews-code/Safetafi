@@ -4,14 +4,16 @@
    SAFETAFI DESIGN SYSTEM - Tailwind v4
    ======================================== */
 @theme {
-  /* Brand Colors */
-  --color-primary: #0047BB;
-  --color-primary-dark: #003494;
-  --color-accent: #FF8C00;
-  --color-accent-dark: #CC6F00;
-  --color-brand-dark: #0B0E14;
+  /* Brand Colors (Updated to Official Specs) */
+  --color-primary: #100287;
+  --color-primary-dark: #0A0155;
+  --color-accent: #F27308;
+  --color-accent-dark: #B35506;
+  --color-brand-light: #C6C2E2;
+  --color-brand-extra: #030301;
+  --color-brand-dark: #030301;
   --color-brand-gray: #F4F7FA;
-  --color-brand-navy: #001B44;
+  --color-brand-navy: #100287;
 
   /* Typography */
   --font-sans: "Public Sans", sans-serif;
