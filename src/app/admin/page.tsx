@@ -1,7 +1,9 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
-export default async function AdminLogin() {
+export default async function AdminLogin(props: { searchParams?: Promise<{ error?: string }> }) {
+  const searchParams = await props.searchParams;
+  const error = searchParams?.error;
   const cookieStore = await cookies();
   const session = cookieStore.get("admin_session");
 
@@ -12,8 +14,13 @@ export default async function AdminLogin() {
 
   async function handleLogin(formData: FormData) {
     "use server";
-    const password = formData.get("password");
+    const password = formData.get("password") as string;
     const correctPassword = process.env.DASHBOARD_PASSCODE;
+
+    // Critical check for Netlify deployment
+    if (!correctPassword) {
+      redirect("/admin?error=server_config_missing");
+    }
 
     if (password === correctPassword) {
       const cookieStore = await cookies();
@@ -28,6 +35,11 @@ export default async function AdminLogin() {
        redirect("/admin?error=invalid_passcode");
     }
   }
+
+  const errorMessage = 
+    error === "invalid_passcode" ? "Access Denied: Incorrect passcode." :
+    error === "server_config_missing" ? "Server Error: DASHBOARD_PASSCODE is not set in environment." :
+    null;
 
   return (
     <div className="min-h-screen bg-[#F4F7FA] flex items-center justify-center p-6 font-sans">
@@ -48,6 +60,13 @@ export default async function AdminLogin() {
             <h2 className="text-xl font-bold text-slate-800">Admin Authentication</h2>
             <p className="text-slate-500 text-sm mt-1">Please enter your specialized passcode to proceed to the command center.</p>
           </div>
+
+          {errorMessage && (
+            <div className="mb-6 bg-red-50 border border-red-100 p-4 rounded-xl flex items-center gap-3 animate-in fade-in slide-in-from-top-2">
+              <span className="material-symbols-outlined text-red-500">error</span>
+              <p className="text-red-600 text-xs font-black uppercase tracking-widest">{errorMessage}</p>
+            </div>
+          )}
 
           <form action={handleLogin} className="space-y-6">
             <div>
