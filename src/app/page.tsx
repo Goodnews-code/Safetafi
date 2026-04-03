@@ -32,11 +32,11 @@ export default function Home() {
         {/* Branding */}
         <div className="text-center mb-16 animate-in fade-in slide-in-from-top-10 duration-1000">
            <div className="flex items-center justify-center mb-12">
-              <div className="relative group p-10 bg-white rounded-[2.5rem] shadow-[0_40px_100px_-20px_rgba(0,0,100,0.12)] transition-all duration-700 hover:scale-[1.03] hover:shadow-[0_60px_130px_-20px_rgba(0,0,100,0.18)] active:scale-95 border border-slate-50">
+              <div className="relative group p-6 transition-all duration-700 hover:scale-110 active:scale-95">
                  <img 
                    src="/logo.svg" 
                    alt="Safetafi" 
-                   className="h-16 md:h-20 w-auto relative z-10" 
+                   className="h-20 md:h-24 w-auto relative z-10" 
                  />
               </div>
            </div>
