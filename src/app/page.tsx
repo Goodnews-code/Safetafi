@@ -31,14 +31,14 @@ export default function Home() {
         </div>
 
         {/* LEFT EDGE */}
-        <div className="hidden md:block absolute -left-12 top-1/2 -translate-y-1/2 opacity-[0.02] pointer-events-none select-none z-0 transform -rotate-90 origin-center whitespace-nowrap leading-none transition-opacity duration-1000">
+        <div className="hidden md:block absolute -left-18 top-1/2 -translate-y-1/2 opacity-[0.02] pointer-events-none select-none z-0 transform -rotate-90 origin-center whitespace-nowrap leading-none transition-opacity duration-1000">
            <h2 className="text-[12rem] font-black tracking-tighter text-slate-900 leading-none uppercase italic">
              SAFETAFI
            </h2>
         </div>
 
         {/* RIGHT EDGE */}
-        <div className="hidden md:block absolute -right-12 top-1/2 -translate-y-1/2 opacity-[0.02] pointer-events-none select-none z-0 transform rotate-90 origin-center whitespace-nowrap leading-none transition-opacity duration-1000">
+        <div className="hidden md:block absolute -right-18 top-1/2 -translate-y-1/2 opacity-[0.02] pointer-events-none select-none z-0 transform rotate-90 origin-center whitespace-nowrap leading-none transition-opacity duration-1000">
            <h2 className="text-[12rem] font-black tracking-tighter text-slate-900 leading-none uppercase italic text-right">
              SAFETAFI
            </h2>
