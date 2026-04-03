@@ -18,7 +18,7 @@ export default function Footer() {
                 <img 
                    src="/logo.svg" 
                    alt="Safetafi" 
-                   className="h-16 w-auto brightness-0 invert opacity-80 group-hover:opacity-100 transition-all drop-shadow-[0_8px_20px_rgba(242,115,8,0.15)]" 
+                   className="h-16 w-auto opacity-90 group-hover:opacity-100 transition-all drop-shadow-[0_8px_30px_rgba(0,0,100,0.2)]" 
                 />
               </div>
             </a>
