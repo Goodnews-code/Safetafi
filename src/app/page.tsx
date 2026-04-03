@@ -22,16 +22,16 @@ export default function Home() {
       {/* Main Content Area */}
       <main className="flex-1 flex flex-col items-center justify-center p-6 relative z-10 py-20 lg:py-32">
         
-        {/* Left Side Brand Anchor */}
-        <div className="hidden md:block fixed left-4 top-1/2 -translate-y-1/2 opacity-[0.025] pointer-events-none select-none z-0 transform -rotate-90 origin-left whitespace-nowrap leading-none transition-opacity duration-1000">
-           <h2 className="text-[14rem] font-black tracking-tighter text-slate-900 leading-none uppercase italic">
+        {/* Integrated Side Brand Anchors - Scroll with page */}
+        <div className="hidden md:block absolute left-12 top-1/2 -translate-y-1/2 opacity-[0.025] pointer-events-none select-none z-0 transform -rotate-90 origin-center whitespace-nowrap leading-none transition-opacity duration-1000">
+           <h2 className="text-[12rem] font-black tracking-tighter text-slate-900 leading-none uppercase italic">
              SAFETAFI
            </h2>
         </div>
 
-        {/* Right Side Brand Anchor */}
-        <div className="hidden md:block fixed right-4 top-1/2 -translate-y-1/2 opacity-[0.025] pointer-events-none select-none z-0 transform rotate-90 origin-right whitespace-nowrap leading-none transition-opacity duration-1000">
-           <h2 className="text-[14rem] font-black tracking-tighter text-slate-900 leading-none uppercase italic text-right">
+        {/* Integrated Side Brand Anchors - Scroll with page */}
+        <div className="hidden md:block absolute right-12 top-1/2 -translate-y-1/2 opacity-[0.025] pointer-events-none select-none z-0 transform rotate-90 origin-center whitespace-nowrap leading-none transition-opacity duration-1000">
+           <h2 className="text-[12rem] font-black tracking-tighter text-slate-900 leading-none uppercase italic text-right">
              SAFETAFI
            </h2>
         </div>
