@@ -31,14 +31,12 @@ export default function Home() {
 
         {/* Branding */}
         <div className="text-center mb-16 animate-in fade-in slide-in-from-top-10 duration-1000">
-           <div className="flex items-center justify-center mb-8">
-              <div className="relative group p-4 rounded-3xl transition-all duration-700 hover:scale-105 active:scale-95">
-                 {/* Premium Glow effect */}
-                 <div className="absolute inset-0 bg-[#100287]/5 rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity" />
+           <div className="flex items-center justify-center mb-12">
+              <div className="relative group p-10 bg-white rounded-[2.5rem] shadow-[0_40px_100px_-20px_rgba(0,0,100,0.12)] transition-all duration-700 hover:scale-[1.03] hover:shadow-[0_60px_130px_-20px_rgba(0,0,100,0.18)] active:scale-95 border border-slate-50">
                  <img 
                    src="/logo.svg" 
                    alt="Safetafi" 
-                   className="h-24 md:h-28 w-auto relative z-10 drop-shadow-[0_15px_30px_rgba(0,0,100,0.08)]" 
+                   className="h-16 md:h-20 w-auto relative z-10" 
                  />
               </div>
            </div>
