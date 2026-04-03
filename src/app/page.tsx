@@ -22,16 +22,16 @@ export default function Home() {
       {/* Main Content Area */}
       <main className="flex-1 flex flex-col items-center justify-center p-6 relative z-10 py-20 lg:py-32">
         
-        {/* Left Edge Watermark */}
-        <div className="hidden lg:block fixed -left-32 top-1/2 -translate-y-1/2 opacity-[0.012] pointer-events-none select-none z-0 transform -rotate-90 origin-center leading-none">
-           <h2 className="text-[20rem] font-black tracking-tighter text-slate-900 leading-none uppercase italic border-none">
+        {/* Left Side Brand Anchor */}
+        <div className="hidden md:block fixed left-4 top-1/2 -translate-y-1/2 opacity-[0.025] pointer-events-none select-none z-0 transform -rotate-90 origin-left whitespace-nowrap leading-none transition-opacity duration-1000">
+           <h2 className="text-[14rem] font-black tracking-tighter text-slate-900 leading-none uppercase italic">
              SAFETAFI
            </h2>
         </div>
 
-        {/* Right Edge Watermark */}
-        <div className="hidden lg:block fixed -right-32 top-1/2 -translate-y-1/2 opacity-[0.012] pointer-events-none select-none z-0 transform rotate-90 origin-center leading-none">
-           <h2 className="text-[20rem] font-black tracking-tighter text-slate-900 leading-none uppercase italic border-none">
+        {/* Right Side Brand Anchor */}
+        <div className="hidden md:block fixed right-4 top-1/2 -translate-y-1/2 opacity-[0.025] pointer-events-none select-none z-0 transform rotate-90 origin-right whitespace-nowrap leading-none transition-opacity duration-1000">
+           <h2 className="text-[14rem] font-black tracking-tighter text-slate-900 leading-none uppercase italic text-right">
              SAFETAFI
            </h2>
         </div>
