@@ -22,9 +22,16 @@ export default function Home() {
       {/* Main Content Area */}
       <main className="flex-1 flex flex-col items-center justify-center p-6 relative z-10 py-20 lg:py-32">
         
-        {/* Subtle Background Header Text */}
-        <div className="absolute top-10 left-1/2 -translate-x-1/2 opacity-5 pointer-events-none">
-           <h2 className="text-[12rem] font-black tracking-tighter text-slate-900 border-2 border-slate-900 px-10 leading-none h-48 flex items-center mb-10 overflow-hidden select-none italic text-center">
+        {/* Left Edge Watermark */}
+        <div className="hidden lg:block fixed -left-32 top-1/2 -translate-y-1/2 opacity-[0.012] pointer-events-none select-none z-0 transform -rotate-90 origin-center leading-none">
+           <h2 className="text-[20rem] font-black tracking-tighter text-slate-900 leading-none uppercase italic border-none">
+             SAFETAFI
+           </h2>
+        </div>
+
+        {/* Right Edge Watermark */}
+        <div className="hidden lg:block fixed -right-32 top-1/2 -translate-y-1/2 opacity-[0.012] pointer-events-none select-none z-0 transform rotate-90 origin-center leading-none">
+           <h2 className="text-[20rem] font-black tracking-tighter text-slate-900 leading-none uppercase italic border-none">
              SAFETAFI
            </h2>
         </div>
