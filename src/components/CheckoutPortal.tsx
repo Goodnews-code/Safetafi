@@ -42,12 +42,6 @@ const SERVICE_OPTIONS = [
     amount: 12500,
     icon: "location_on",
   },
-  {
-    id: "custom",
-    label: "Custom / Quote",
-    amount: 0,
-    icon: "edit",
-  },
 ];
 
 function formatNaira(amount: number) {
@@ -78,7 +72,6 @@ export default function CheckoutPortal() {
   });
 
   const selectedService = SERVICE_OPTIONS.find((s) => s.label === details.service);
-  const isCustom = selectedService?.id === "custom";
 
   // Paystack Config
   const publicKey = process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY || "";
@@ -244,19 +237,7 @@ export default function CheckoutPortal() {
                 </div>
               </div>
 
-              {isCustom && (
-                <div>
-                  <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 ml-1">Custom Amount (₦)</label>
-                  <input 
-                    required 
-                    type="number" 
-                    min={100}
-                    value={details.amount || ''}
-                    onChange={(e) => setDetails({...details, amount: Number(e.target.value)})}
-                    className="w-full bg-slate-50 border border-slate-100 px-6 py-4 rounded-2xl outline-none focus:ring-4 focus:ring-blue-100 focus:border-[#100287] transition-all font-black text-slate-900"
-                  />
-                </div>
-              )}
+
 
               <button type="submit" className="w-full bg-[#100287] text-white py-5 rounded-2xl font-black text-lg hover:bg-[#030301] transition-all shadow-xl shadow-blue-600/25 flex items-center justify-center gap-3 group">
                  Review Booking
@@ -283,7 +264,7 @@ export default function CheckoutPortal() {
                      </div>
                      <div className="flex justify-between border-b border-slate-200 pb-4">
                         <span className="text-xs font-black text-slate-400 uppercase tracking-widest">Scheduled</span>
-                        <span className="text-sm font-black text-[#F27308]">{details.date}</span>
+                        <span className="text-sm font-black text-[#E7B036]">{details.date}</span>
                      </div>
                      <div className="flex justify-between pt-2">
                         <span className="text-lg font-black text-slate-900">Total Price</span>

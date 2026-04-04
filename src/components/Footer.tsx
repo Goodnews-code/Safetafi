@@ -14,7 +14,7 @@ export default function Footer() {
             <a href="#" className="inline-block group mb-10 transition-transform duration-500 hover:scale-105 active:scale-95">
               <div className="relative">
                 {/* Subtle Brand Glow */}
-                <div className="absolute -inset-4 bg-[#F27308]/10 blur-3xl rounded-full opacity-0 group-hover:opacity-100 transition-all duration-700" />
+                <div className="absolute -inset-4 bg-[#E7B036]/10 blur-3xl rounded-full opacity-0 group-hover:opacity-100 transition-all duration-700" />
                 <img 
                    src="/logo.svg" 
                    alt="Safetafi" 
@@ -39,14 +39,14 @@ export default function Footer() {
              <p className="text-slate-500 text-sm font-black tracking-[0.25em] uppercase">
                © {currentYear} SAFETAFI Transport &amp; Logistics Network
              </p>
-             <p className="text-[#F27308] text-xs font-black uppercase tracking-[0.4em]">
+             <p className="text-[#E7B036] text-xs font-black uppercase tracking-[0.4em]">
                HQ: Ile-Ife, Nigeria • Verified Operations
              </p>
           </div>
 
           <div className="flex flex-wrap justify-center items-center gap-6 px-8 py-4 bg-white/5 rounded-3xl border border-white/10 backdrop-blur-xl">
             <a href="mailto:safetafilogistics@gmail.com" className="flex items-center gap-3 group">
-               <span className="material-symbols-outlined text-sm text-[#F27308] group-hover:scale-110 transition-transform">mail</span>
+               <span className="material-symbols-outlined text-sm text-[#E7B036] group-hover:scale-110 transition-transform">mail</span>
                <span className="text-[10px] font-black text-slate-500 group-hover:text-white uppercase tracking-widest transition-colors">safetafilogistics@gmail.com</span>
             </a>
             <span className="h-4 w-px bg-white/10 hidden md:block" />

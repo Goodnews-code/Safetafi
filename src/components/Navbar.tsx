@@ -36,7 +36,7 @@ export default function Navbar({ onPayNowClick }: NavbarProps) {
           <a href="#" className="flex items-center group">
             <span className="text-2xl font-black tracking-tight">
               <span className="text-[#0047BB]">SAFE</span>
-              <span className="text-[#FF8C00]">TAFI</span>
+              <span className="text-[#E7B036]">TAFI</span>
             </span>
           </a>
 

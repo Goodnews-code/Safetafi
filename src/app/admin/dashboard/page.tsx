@@ -234,7 +234,7 @@ export default async function AdminDashboard() {
                          </div>
                       </td>
                       <td className="px-8 py-6">
-                        <span className="text-[11px] font-black text-[#F27308] uppercase tracking-tighter bg-orange-50 px-2.5 py-1 rounded-lg border border-orange-100">
+                        <span className="text-[11px] font-black text-[#E7B036] uppercase tracking-tighter bg-orange-50 px-2.5 py-1 rounded-lg border border-orange-100">
                            {tr.date || "Not Set"}
                         </span>
                       </td>

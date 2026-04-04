@@ -28,8 +28,8 @@ export default function HeroSection({ onPayNowClick }: HeroProps) {
             style={{ animationDelay: "0s" }}
           >
             <span className="relative flex h-2.5 w-2.5">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#FF8C00] opacity-75" />
-              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#FF8C00]" />
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#E7B036] opacity-75" />
+              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#E7B036]" />
             </span>
             NIGERIA&apos;S PREMIER LOGISTICS NETWORK
           </div>
@@ -42,7 +42,7 @@ export default function HeroSection({ onPayNowClick }: HeroProps) {
             Moving Nigeria{" "}
             <br />
             <span className="text-[#0047BB]">Reliably</span> &amp;{" "}
-            <span className="text-[#FF8C00]">Safely</span>
+            <span className="text-[#E7B036]">Safely</span>
           </h1>
 
           {/* Subtext */}
@@ -84,7 +84,7 @@ export default function HeroSection({ onPayNowClick }: HeroProps) {
           >
             <div>
               <div className="text-3xl font-black text-white">
-                100<span className="text-[#FF8C00]">%</span>
+                100<span className="text-[#E7B036]">%</span>
               </div>
               <div className="text-xs font-bold text-slate-400 uppercase tracking-widest mt-1">
                 Secure Handover

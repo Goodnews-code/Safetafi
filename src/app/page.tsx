@@ -14,7 +14,7 @@ export default function Home() {
       
       {/* Dynamic Glass Background Shapes */}
       <div className="absolute top-[-10%] right-[-10%] w-[50%] h-[50%] bg-[#100287] opacity-[0.05] rounded-full blur-[120px] animate-pulse" />
-      <div className="absolute bottom-[-10%] left-[-10%] w-[40%] h-[40%] bg-[#F27308] opacity-[0.05] rounded-full blur-[100px] animate-pulse duration-[5s]" />
+      <div className="absolute bottom-[-10%] left-[-10%] w-[40%] h-[40%] bg-[#E7B036] opacity-[0.05] rounded-full blur-[100px] animate-pulse duration-[5s]" />
 
       {/* Grid Pattern Layer */}
       <div className="absolute inset-0 opacity-[0.03] pattern-grid-lg pointer-events-none" />
@@ -58,7 +58,7 @@ export default function Home() {
            <h1 className="text-5xl md:text-7xl font-black text-slate-900 tracking-tighter mb-4 leading-[0.9] max-w-4xl mx-auto uppercase">
              Transport and <span className="text-[#100287]">Logistics Network</span>
            </h1>
-           <p className="text-2xl text-[#F27308] font-black max-w-lg mx-auto tracking-widest uppercase opacity-90 mt-2">
+           <p className="text-2xl text-[#E7B036] font-black max-w-lg mx-auto tracking-widest uppercase opacity-90 mt-2">
              Safety, Comfort and Affordability
            </p>
         </div>

@@ -60,11 +60,11 @@ export default function ServicesSection({ onPayNowClick }: ServicesProps) {
                 {/* Icon */}
                 <div
                   className={`w-20 h-20 rounded-[2rem] flex items-center justify-center mb-10 transition-all duration-500 group-hover:scale-110
-                    ${isPrimary ? "bg-blue-50 group-hover:bg-[#0047BB]" : "bg-orange-50 group-hover:bg-[#FF8C00]"}`}
+                    ${isPrimary ? "bg-blue-50 group-hover:bg-[#0047BB]" : "bg-orange-50 group-hover:bg-[#E7B036]"}`}
                 >
                   <span
                     className={`material-symbols-outlined text-5xl transition-colors duration-500
-                      ${isPrimary ? "text-[#0047BB] group-hover:text-white" : "text-[#FF8C00] group-hover:text-white"}`}
+                      ${isPrimary ? "text-[#0047BB] group-hover:text-white" : "text-[#E7B036] group-hover:text-white"}`}
                   >
                     {s.icon}
                   </span>
@@ -86,7 +86,7 @@ export default function ServicesSection({ onPayNowClick }: ServicesProps) {
                         className="flex items-center gap-3 text-sm font-bold text-slate-500"
                       >
                         <span
-                          className={`material-symbols-outlined text-lg ${isPrimary ? "text-[#0047BB]" : "text-[#FF8C00]"}`}
+                          className={`material-symbols-outlined text-lg ${isPrimary ? "text-[#0047BB]" : "text-[#E7B036]"}`}
                         >
                           check_circle
                         </span>

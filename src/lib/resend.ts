@@ -23,7 +23,7 @@ export function getReceiptEmailHtml(data: {
           .container { max-width: 600px; margin: 40px auto; background-color: #ffffff; border-radius: 24px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
           .header { background-color: #001B44; padding: 40px; text-align: center; }
           .logo { color: #0047BB; font-weight: 900; font-size: 24px; text-transform: uppercase; letter-spacing: -1px; }
-          .logo span { color: #FF8C00; }
+          .logo span { color: #E7B036; }
           .content { padding: 40px; color: #334155; line-height: 1.6; }
           h1 { color: #0f172a; font-size: 24px; font-weight: 800; margin-bottom: 16px; }
           .receipt-box { background-color: #f8fafc; border-radius: 16px; padding: 24px; margin: 32px 0; border: 1px solid #e2e8f0; }
