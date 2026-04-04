@@ -62,10 +62,10 @@ export default function AdminActions({ transactions }: AdminActionsProps) {
   };
 
   return (
-    <div className="flex items-center gap-3">
+    <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full md:w-auto">
       <button
         onClick={handleRefresh}
-        className="bg-white text-slate-600 px-6 py-3 rounded-xl font-bold shadow-sm border border-slate-200 hover:bg-slate-50 transition-all flex items-center gap-2 active:scale-95"
+        className="bg-white text-slate-600 px-6 py-3 rounded-xl font-bold shadow-sm border border-slate-200 hover:bg-slate-50 transition-all flex justify-center items-center gap-2 active:scale-95 w-full sm:w-auto"
       >
         <span className="material-symbols-outlined text-xl">sync</span>
         Refresh Data
@@ -73,7 +73,7 @@ export default function AdminActions({ transactions }: AdminActionsProps) {
       <button 
         onClick={handleExport}
         disabled={exporting}
-        className="bg-[#0047BB] text-white px-6 py-3 rounded-xl font-black shadow-lg shadow-blue-600/20 hover:bg-[#001B44] transition-all flex items-center gap-2 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed group"
+        className="bg-[#0047BB] text-white px-6 py-3 rounded-xl font-black shadow-lg shadow-blue-600/20 hover:bg-[#001B44] transition-all flex justify-center items-center gap-2 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed group w-full sm:w-auto"
       >
         <span className={`material-symbols-outlined text-xl ${exporting ? 'animate-spin' : ''}`}>
           {exporting ? 'progress_activity' : 'download'}

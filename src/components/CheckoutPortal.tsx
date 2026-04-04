@@ -9,7 +9,7 @@ const SERVICE_OPTIONS = [
   {
     id: "berger",
     label: "Berger",
-    amount: 10000,
+    amount: 11000,
     icon: "location_on",
   },
   {
@@ -21,7 +21,7 @@ const SERVICE_OPTIONS = [
   {
     id: "iyanapaja",
     label: "Iyanapaja",
-    amount: 12000,
+    amount: 12500,
     icon: "location_on",
   },
   {
@@ -33,13 +33,13 @@ const SERVICE_OPTIONS = [
   {
     id: "ibadan",
     label: "Ibadan",
-    amount: 8000,
+    amount: 5000,
     icon: "location_on",
   },
   {
     id: "ikorodu",
     label: "Ikorodu",
-    amount: 12000,
+    amount: 12500,
     icon: "location_on",
   },
   {
