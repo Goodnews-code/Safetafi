@@ -59,6 +59,7 @@ export async function POST(req: NextRequest) {
       phone: getMetaValue("phone"),
       customer_name: getMetaValue("name"),
       service: getMetaValue("service"),
+      destination: getMetaValue("destination"),
       date: getMetaValue("date"),
       description: getMetaValue("description"),
       status: transaction.status,

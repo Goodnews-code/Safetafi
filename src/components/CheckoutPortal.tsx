@@ -74,6 +74,7 @@ export default function CheckoutPortal() {
     amount: SERVICE_OPTIONS[0].amount,
     date: "Tuesday, 7th of April, 2026",
     description: "",
+    destination: "Campus Gate",
   });
 
   const selectedService = SERVICE_OPTIONS.find((s) => s.label === details.service);
@@ -92,7 +93,8 @@ export default function CheckoutPortal() {
         { display_name: "Customer Name", variable_name: "name", value: details.name },
         { display_name: "Phone", variable_name: "phone", value: details.phone },
         { display_name: "Scheduled Date", variable_name: "date", value: details.date },
-        { display_name: "Delivery Route", variable_name: "service", value: details.service },
+        { display_name: "Meeting Point", variable_name: "service", value: details.service },
+        { display_name: "Destination", variable_name: "destination", value: details.destination },
         { display_name: "Additional Info", variable_name: "description", value: details.description },
       ],
     },
@@ -207,8 +209,23 @@ export default function CheckoutPortal() {
                  </div>
               </div>
 
+              <div className="grid md:grid-cols-2 gap-4">
+                 <div>
+                    <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 ml-1">Destination *</label>
+                    <select
+                      required
+                      value={details.destination}
+                      onChange={(e) => setDetails({...details, destination: e.target.value})}
+                      className="w-full bg-slate-50 border border-slate-100 px-6 py-4 rounded-2xl outline-none focus:ring-4 focus:ring-blue-100 focus:border-[#100287] transition-all font-bold text-slate-700 cursor-pointer appearance-none"
+                    >
+                       <option value="Campus Gate">Campus Gate</option>
+                       <option value="Hostels on Campus">Hostels on Campus</option>
+                    </select>
+                 </div>
+              </div>
+
               <div>
-                <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 ml-1">Select Route</label>
+                <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 ml-1">Select Meeting Point</label>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                   {SERVICE_OPTIONS.map((svc) => (
                     <button
@@ -257,8 +274,12 @@ export default function CheckoutPortal() {
                         <span className="text-sm font-black text-slate-900">{details.name}</span>
                      </div>
                      <div className="flex justify-between border-b border-slate-200 pb-4">
-                        <span className="text-xs font-black text-slate-400 uppercase tracking-widest">Route</span>
+                        <span className="text-xs font-black text-slate-400 uppercase tracking-widest">Meeting Point</span>
                         <span className="text-sm font-black text-slate-900">{details.service}</span>
+                     </div>
+                     <div className="flex justify-between border-b border-slate-200 pb-4">
+                        <span className="text-xs font-black text-slate-400 uppercase tracking-widest">Destination</span>
+                        <span className="text-sm font-black text-slate-900">{details.destination}</span>
                      </div>
                      <div className="flex justify-between border-b border-slate-200 pb-4">
                         <span className="text-xs font-black text-slate-400 uppercase tracking-widest">Scheduled</span>

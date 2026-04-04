@@ -27,12 +27,13 @@ export default function AdminActions({}: AdminActionsProps) {
       }
 
       // Define CSV headers
-      const headers = ["Customer", "Service", "Schedule", "Amount (NGN)", "Status", "Reference", "Paid At"];
+      const headers = ["Customer", "Meeting Point", "Destination", "Schedule", "Amount (NGN)", "Status", "Reference", "Paid At"];
       
       // Map transaction data to rows
       const rows = transactions.map((tr: any) => [
         `"${tr.customer_name || 'Anonymous'}"`,
         `"${tr.service || 'Logistics'}"`,
+        `"${tr.destination || 'N/A'}"`,
         `"${tr.date || 'N/A'}"`,
         tr.amount || 0,
         tr.status?.toUpperCase() || 'UNKNOWN',

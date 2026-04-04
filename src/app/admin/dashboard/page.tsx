@@ -12,7 +12,7 @@ const getLedgerStats = unstable_cache(
     const supabase = getSupabase();
     const { data, error } = await supabase
       .from("transactions")
-      .select("id, amount, status");
+      .select("id, amount, status, destination");
     return JSON.parse(JSON.stringify({ data, error }));
   },
   ["ledger-stats"],
@@ -263,7 +263,9 @@ export default async function AdminDashboard() {
             <table className="w-full text-left">
               <thead>
                 <tr className="bg-slate-50/50 text-slate-400 font-bold text-[10px] uppercase tracking-[0.2em] border-b border-slate-100">
-                  <th className="px-8 py-5">Customer & Service</th>
+                  <th className="px-8 py-5">Client & Details</th>
+                  <th className="px-8 py-5">Meeting Point</th>
+                  <th className="px-8 py-5">Destination</th>
                   <th className="px-8 py-5">Schedule</th>
                   <th className="px-8 py-5">Amount</th>
                   <th className="px-8 py-5 text-center">Status</th>
@@ -280,11 +282,26 @@ export default async function AdminDashboard() {
                           <span className="font-black text-slate-900 group-hover:text-[#100287] transition-colors text-sm">
                             {tr.customer_name || "Anonymous Client"}
                           </span>
-                          <span className="text-[11px] font-bold text-slate-400 flex items-center gap-1 mt-0.5 uppercase tracking-wide">
-                             <span className="material-symbols-outlined text-[10px]">inventory_2</span>
+                          <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-1">
+                             {tr.phone || "No Phone"}
+                          </span>
+                        </div>
+                      </td>
+                      <td className="px-8 py-6">
+                        <div className="flex items-center gap-1.5">
+                          <span className="material-symbols-outlined text-[14px] text-[#100287]">location_on</span>
+                          <span className="text-[11px] font-black text-slate-700 uppercase tracking-tight">
                              {tr.service || "Booking"}
                           </span>
                         </div>
+                      </td>
+                      <td className="px-8 py-6">
+                         <div className="flex items-center gap-1.5">
+                           <span className="material-symbols-outlined text-[14px] text-orange-500">near_me</span>
+                           <span className="text-[11px] font-black text-slate-700 uppercase tracking-tight">
+                              {tr.destination || "-"}
+                           </span>
+                         </div>
                       </td>
                       <td className="px-8 py-6">
                         <span className="text-[11px] font-black text-[#F27308] uppercase tracking-tighter bg-orange-50 px-2.5 py-1 rounded-lg border border-orange-100">
