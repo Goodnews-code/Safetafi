@@ -2,11 +2,9 @@
 
 import { useState } from "react";
 
-interface AdminActionsProps {
-  transactions: any[];
-}
+interface AdminActionsProps {}
 
-export default function AdminActions({ transactions }: AdminActionsProps) {
+export default function AdminActions({}: AdminActionsProps) {
   const [exporting, setExporting] = useState(false);
 
   // 1. Refresh Function
@@ -15,9 +13,14 @@ export default function AdminActions({ transactions }: AdminActionsProps) {
   };
 
   // 2. CSV Export Function
-  const handleExport = () => {
+  const handleExport = async () => {
     setExporting(true);
     try {
+      const res = await fetch("/api/admin/export");
+      if (!res.ok) throw new Error("Could not fetch data");
+      
+      const { transactions } = await res.json();
+
       if (!transactions || transactions.length === 0) {
         alert("No data to export.");
         return;
@@ -27,7 +30,7 @@ export default function AdminActions({ transactions }: AdminActionsProps) {
       const headers = ["Customer", "Service", "Schedule", "Amount (NGN)", "Status", "Reference", "Paid At"];
       
       // Map transaction data to rows
-      const rows = transactions.map(tr => [
+      const rows = transactions.map((tr: any) => [
         `"${tr.customer_name || 'Anonymous'}"`,
         `"${tr.service || 'Logistics'}"`,
         `"${tr.date || 'N/A'}"`,
@@ -40,7 +43,7 @@ export default function AdminActions({ transactions }: AdminActionsProps) {
       // Combine into one string
       const csvContent = [
         headers.join(","),
-        ...rows.map(row => row.join(","))
+        ...rows.map((row: any) => row.join(","))
       ].join("\n");
 
       // Create a Blob and trigger a download

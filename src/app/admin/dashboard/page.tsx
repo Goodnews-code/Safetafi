@@ -7,16 +7,29 @@ import AdminActions from "./AdminActions";
 // Revalidate the page data every 30 seconds to provide fresh data while allowing caching
 export const revalidate = 30;
 
-const getCachedTransactions = unstable_cache(
+const getLedgerStats = unstable_cache(
+  async () => {
+    const supabase = getSupabase();
+    const { data, error } = await supabase
+      .from("transactions")
+      .select("id, amount, status");
+    return JSON.parse(JSON.stringify({ data, error }));
+  },
+  ["ledger-stats"],
+  { revalidate: 30, tags: ["transactions"] }
+);
+
+const getRecentTransactions = unstable_cache(
   async () => {
     const supabase = getSupabase();
     const { data, error } = await supabase
       .from("transactions")
       .select("*")
-      .order("created_at", { ascending: false });
-    return { data, error };
+      .order("created_at", { ascending: false })
+      .limit(100);
+    return JSON.parse(JSON.stringify({ data, error }));
   },
-  ["transactions-list"],
+  ["recent-transactions"],
   { revalidate: 30, tags: ["transactions"] }
 );
 
@@ -36,21 +49,27 @@ export default async function AdminDashboard() {
     redirect("/admin");
   }
   
-  // 1. Fetch transactions using Next.js caching
-  const { data: transactions, error } = await getCachedTransactions();
+  // 1. Fetch data in parallel
+  const [statsRes, recentRes] = await Promise.all([
+    getLedgerStats(),
+    getRecentTransactions()
+  ]);
 
-  if (error) {
+  if (statsRes.error || recentRes.error) {
     return (
       <div className="flex h-screen items-center justify-center bg-red-50 text-red-600 font-bold p-8 text-center rounded-3xl">
-        Error loading transactions: {error.message}
+        Error loading transactions: {statsRes.error?.message || recentRes.error?.message}
       </div>
     );
   }
 
+  const allTxForStats = statsRes.data || [];
+  const transactions = recentRes.data || [];
+
   // 2. Simple Statistics Calculations
-  const totalTransactions = transactions?.length || 0;
-  const successfulOnes = transactions?.filter((t) => t.status === "success" || t.status === "test_success") || [];
-  const totalRevenue = successfulOnes.reduce((acc, t) => acc + (t.amount || 0), 0);
+  const totalTransactions = allTxForStats.length;
+  const successfulOnes = allTxForStats.filter((t: any) => t.status === "success" || t.status === "test_success");
+  const totalRevenue = successfulOnes.reduce((acc: number, t: any) => acc + (t.amount || 0), 0);
   const successCount = successfulOnes.length;
 
   // 3. Formatter for currency
@@ -161,7 +180,7 @@ export default async function AdminDashboard() {
               Monitor your latest business revenue and bookings in real-time.
             </p>
           </div>
-          <AdminActions transactions={transactions || []} />
+          <AdminActions />
         </header>
 
         {/* Statistics Cards */}
@@ -253,9 +272,9 @@ export default async function AdminDashboard() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-50">
-                {transactions && transactions.length > 0 ? (
-                  transactions.map((tr) => (
-                    <tr key={tr.id} className="hover:bg-slate-50 transition-colors group">
+                  {transactions && transactions.length > 0 ? (
+                    transactions.map((tr: any) => (
+                      <tr key={tr.id} className="hover:bg-slate-50 transition-colors group">
                       <td className="px-8 py-6">
                         <div className="flex flex-col">
                           <span className="font-black text-slate-900 group-hover:text-[#100287] transition-colors text-sm">
