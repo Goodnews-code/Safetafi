@@ -93,15 +93,15 @@ export default async function AdminDashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F4F7FA] flex flex-col md:flex-row font-sans">
-      {/* Sidebar */}
-      <aside className="w-full md:w-64 bg-[#001B44] text-white p-4 md:p-8 flex flex-col md:fixed md:inset-y-0 shadow-2xl z-20 shrink-0">
-        <div className="flex items-center justify-between md:justify-start md:mb-12">
+    <div className="min-h-screen bg-[#F4F7FA] flex font-sans overflow-x-hidden">
+      {/* Permanent Fixed Sidebar */}
+      <aside className="w-20 md:w-64 bg-[#001B44] text-white flex flex-col fixed inset-y-0 shadow-2xl z-20 shrink-0">
+        <div className="p-4 md:p-8 flex items-center justify-center md:justify-start">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-[#0047BB] rounded-xl flex items-center justify-center font-black text-xl italic group hover:scale-110 transition-transform">
+            <div className="w-10 h-10 bg-[#0047BB] rounded-xl flex items-center justify-center font-black text-xl italic group hover:scale-110 transition-transform flex-shrink-0">
               ST
             </div>
-            <div>
+            <div className="hidden md:block">
               <h1 className="text-lg font-black tracking-tighter uppercase leading-none">
                 SAFETAFI
               </h1>
@@ -110,57 +110,46 @@ export default async function AdminDashboard() {
               </p>
             </div>
           </div>
-          {/* Mobile view avatar */}
-          <div className="md:hidden flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center font-black text-xs border-2 border-green-400">
-              AD
-            </div>
-          </div>
         </div>
 
-        <nav className="flex md:flex-col gap-2 md:space-y-2 overflow-x-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] pb-2 md:pb-0 pt-4 md:pt-0 md:flex-1">
+        <nav className="flex-1 px-3 md:px-4 space-y-4 pt-6">
           <a
             href="#"
-            className="flex items-center gap-3 p-3 md:p-4 rounded-xl bg-[#0047BB]/20 text-white font-bold border-b-4 md:border-b-0 md:border-l-4 border-blue-500 whitespace-nowrap"
+            className="flex items-center justify-center md:justify-start gap-3 p-3 md:p-4 rounded-xl bg-[#0047BB]/20 text-white font-bold border-l-4 border-blue-500 transition-all group"
+            title="Transactions"
           >
-            <span className="material-symbols-outlined text-xl">dashboard</span>
-            Transactions
+            <span className="material-symbols-outlined text-2xl md:text-xl group-hover:scale-110 transition-transform">dashboard</span>
+            <span className="hidden md:block">Transactions</span>
           </a>
           <a
             href="/"
-            className="flex items-center gap-3 p-3 md:p-4 rounded-xl text-slate-400 hover:text-white hover:bg-white/5 transition-all whitespace-nowrap"
+            className="flex items-center justify-center md:justify-start gap-3 p-3 md:p-4 rounded-xl text-slate-400 hover:text-white hover:bg-white/5 transition-all group"
+            title="View Site"
           >
-            <span className="material-symbols-outlined text-xl">open_in_new</span>
-            View Site
+            <span className="material-symbols-outlined text-2xl md:text-xl group-hover:scale-110 transition-transform">open_in_new</span>
+            <span className="hidden md:block">View Site</span>
           </a>
-          <form action={handleLogout} className="md:hidden ml-auto flex-shrink-0">
-             <button
-               type="submit"
-               className="flex items-center gap-2 p-3 rounded-xl text-red-400 hover:text-white hover:bg-red-600 transition-all font-bold group"
-             >
-               <span className="material-symbols-outlined text-xl group-hover:scale-125 transition-transform">logout</span>
-             </button>
-          </form>
         </nav>
 
-        <div className="hidden md:block mt-auto pt-8 border-t border-white/10 space-y-4">
+        <div className="mt-auto p-4 md:p-8 border-t border-white/10 space-y-6">
           <form action={handleLogout}>
              <button
                type="submit"
-               className="w-full flex items-center gap-3 p-4 rounded-xl text-red-400 hover:text-white hover:bg-red-600 transition-all font-bold group"
+               className="w-full flex items-center justify-center md:justify-start gap-3 p-3 md:p-4 rounded-xl text-red-400 hover:text-white hover:bg-red-600 transition-all font-bold group"
+               title="Log Out"
              >
-               <span className="material-symbols-outlined text-xl group-hover:scale-125 transition-transform">logout</span>
-               Log Out
+               <span className="material-symbols-outlined text-2xl md:text-xl group-hover:rotate-12 transition-transform">logout</span>
+               <span className="hidden md:block text-sm uppercase tracking-widest">Logout</span>
              </button>
           </form>
 
-          <div className="flex items-center gap-3 px-2 mt-4">
-            <div className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center font-black text-xs border-2 border-green-400">
+          <div className="flex items-center justify-center md:justify-start gap-3 px-1">
+            <div className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center font-black text-xs border-2 border-green-400 shrink-0">
               AD
             </div>
-            <div>
+            <div className="hidden md:block">
               <p className="text-xs font-black">Admin User</p>
-              <p className="text-[10px] text-slate-500 uppercase tracking-widest font-bold">
+              <p className="text-[9px] text-slate-500 uppercase tracking-widest font-bold">
                 Online
               </p>
             </div>
@@ -168,8 +157,8 @@ export default async function AdminDashboard() {
         </div>
       </aside>
 
-      {/* Main Content Area */}
-      <main className="flex-1 w-full md:ml-64 p-4 sm:p-6 md:p-10 max-w-7xl">
+      {/* Main Content Area — adjusts margin for fixed sidebar */}
+      <main className="flex-1 ml-20 md:ml-64 p-4 sm:p-6 md:p-10 max-w-7xl">
         {/* Header Section */}
         <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-10">
           <div>
