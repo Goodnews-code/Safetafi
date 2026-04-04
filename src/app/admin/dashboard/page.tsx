@@ -3,6 +3,7 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { unstable_cache } from "next/cache";
 import AdminActions from "./AdminActions";
+import Sidebar from "./Sidebar";
 
 // Revalidate the page data every 30 seconds to provide fresh data while allowing caching
 export const revalidate = 30;
@@ -93,72 +94,12 @@ export default async function AdminDashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F4F7FA] flex font-sans overflow-x-hidden">
-      {/* Permanent Fixed Sidebar */}
-      <aside className="w-20 md:w-64 bg-[#001B44] text-white flex flex-col fixed inset-y-0 shadow-2xl z-20 shrink-0">
-        <div className="p-4 md:p-8 flex items-center justify-center md:justify-start">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-[#0047BB] rounded-xl flex items-center justify-center font-black text-xl italic group hover:scale-110 transition-transform flex-shrink-0">
-              ST
-            </div>
-            <div className="hidden md:block">
-              <h1 className="text-lg font-black tracking-tighter uppercase leading-none">
-                SAFETAFI
-              </h1>
-              <p className="text-[10px] font-bold text-blue-400 uppercase tracking-widest mt-0.5">
-                Admin Portal
-              </p>
-            </div>
-          </div>
-        </div>
+    <div className="min-h-screen bg-[#F4F7FA] flex font-sans overflow-x-clip">
+      {/* Sidebar (Client Component for Toggle) */}
+      <Sidebar handleLogout={handleLogout} />
 
-        <nav className="flex-1 px-3 md:px-4 space-y-4 pt-6">
-          <a
-            href="#"
-            className="flex items-center justify-center md:justify-start gap-3 p-3 md:p-4 rounded-xl bg-[#0047BB]/20 text-white font-bold border-l-4 border-blue-500 transition-all group"
-            title="Transactions"
-          >
-            <span className="material-symbols-outlined text-2xl md:text-xl group-hover:scale-110 transition-transform">dashboard</span>
-            <span className="hidden md:block">Transactions</span>
-          </a>
-          <a
-            href="/"
-            className="flex items-center justify-center md:justify-start gap-3 p-3 md:p-4 rounded-xl text-slate-400 hover:text-white hover:bg-white/5 transition-all group"
-            title="View Site"
-          >
-            <span className="material-symbols-outlined text-2xl md:text-xl group-hover:scale-110 transition-transform">open_in_new</span>
-            <span className="hidden md:block">View Site</span>
-          </a>
-        </nav>
-
-        <div className="mt-auto p-4 md:p-8 border-t border-white/10 space-y-6">
-          <form action={handleLogout}>
-             <button
-               type="submit"
-               className="w-full flex items-center justify-center md:justify-start gap-3 p-3 md:p-4 rounded-xl text-red-400 hover:text-white hover:bg-red-600 transition-all font-bold group"
-               title="Log Out"
-             >
-               <span className="material-symbols-outlined text-2xl md:text-xl group-hover:rotate-12 transition-transform">logout</span>
-               <span className="hidden md:block text-sm uppercase tracking-widest">Logout</span>
-             </button>
-          </form>
-
-          <div className="flex items-center justify-center md:justify-start gap-3 px-1">
-            <div className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center font-black text-xs border-2 border-green-400 shrink-0">
-              AD
-            </div>
-            <div className="hidden md:block">
-              <p className="text-xs font-black">Admin User</p>
-              <p className="text-[9px] text-slate-500 uppercase tracking-widest font-bold">
-                Online
-              </p>
-            </div>
-          </div>
-        </div>
-      </aside>
-
-      {/* Main Content Area — adjusts margin for fixed sidebar */}
-      <main className="flex-1 ml-20 md:ml-64 p-4 sm:p-6 md:p-10 max-w-7xl">
+      {/* Main Content Area — adjusts margin ONLY on desktop */}
+      <main className="flex-1 md:ml-64 p-4 sm:p-6 md:p-10 max-w-7xl">
         {/* Header Section */}
         <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-10">
           <div>
