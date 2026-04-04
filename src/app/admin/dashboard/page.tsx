@@ -1,10 +1,24 @@
 import { getSupabase } from "@/lib/supabase";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { unstable_cache } from "next/cache";
 import AdminActions from "./AdminActions";
 
-// Force Dynamic so it fetches fresh transactions every time the page is loaded
-export const dynamic = "force-dynamic";
+// Revalidate the page data every 30 seconds to provide fresh data while allowing caching
+export const revalidate = 30;
+
+const getCachedTransactions = unstable_cache(
+  async () => {
+    const supabase = getSupabase();
+    const { data, error } = await supabase
+      .from("transactions")
+      .select("*")
+      .order("created_at", { ascending: false });
+    return { data, error };
+  },
+  ["transactions-list"],
+  { revalidate: 30, tags: ["transactions"] }
+);
 
 export default async function AdminDashboard() {
   const cookieStore = await cookies();
@@ -21,12 +35,9 @@ export default async function AdminDashboard() {
     cookieStore.delete("admin_session");
     redirect("/admin");
   }
-  // 1. Fetch transactions directly from Supabase (Server-side)
-  const supabase = getSupabase();
-  const { data: transactions, error } = await supabase
-    .from("transactions")
-    .select("*")
-    .order("created_at", { ascending: false });
+  
+  // 1. Fetch transactions using Next.js caching
+  const { data: transactions, error } = await getCachedTransactions();
 
   if (error) {
     return (

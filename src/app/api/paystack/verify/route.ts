@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import { getSupabase } from "@/lib/supabase";
 
 export async function POST(req: NextRequest) {
@@ -81,6 +82,9 @@ export async function POST(req: NextRequest) {
         { status: 500 }
       );
     }
+
+    // Bust the dashboard cache so the admin dashboard shows fresh data
+    revalidatePath("/admin/dashboard");
 
     return NextResponse.json({
       status: true,
