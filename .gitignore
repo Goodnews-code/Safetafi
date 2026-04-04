@@ -34,8 +34,10 @@ yarn-error.log*
 .env*
 
 # archived / unused files
-/src/app/archive/
+/src/app/_archive/
 /src/components/PaymentModal.tsx
+build.log
+build_failed*.txt
 
 # local developer notes
 DEV_NOTES.md
