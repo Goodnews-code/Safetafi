@@ -75,12 +75,15 @@ export default function CheckoutPortal() {
 
   // Paystack Config
   const publicKey = process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY || "";
-  const config = {
+  const config: any = {
     reference: `SFTF_${Date.now()}`,
     email: details.email,
     amount: (details.amount || 0) * 100, 
     currency: "NGN",
     publicKey,
+    // Including these outside metadata makes them appear in the Paystack Customer profile
+    firstname: details.name,
+    phone: details.phone,
     metadata: {
       custom_fields: [
         { display_name: "Customer Name", variable_name: "name", value: details.name },
