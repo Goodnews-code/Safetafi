@@ -66,8 +66,25 @@ export async function POST(req: NextRequest) {
       paid_at: transaction.paid_at,
     };
 
-    // 2. Insert into Supabase
+    // 2. Insert into Supabase (if not already there via webhook)
     const supabase = getSupabase();
+    
+    const { data: existing } = await supabase
+      .from("transactions")
+      .select("reference")
+      .eq("reference", transaction.reference)
+      .maybeSingle();
+
+    if (existing) {
+        console.log(`Transaction ${transaction.reference} already via Webhook. Redirecting to success.`);
+        revalidatePath("/admin/dashboard");
+        return NextResponse.json({
+          status: true,
+          message: "Payment already verified and recorded.",
+          data: { reference: transaction.reference },
+        });
+    }
+
     const { error: dbError } = await supabase
       .from("transactions")
       .insert([dbTransaction]);
