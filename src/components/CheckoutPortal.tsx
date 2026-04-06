@@ -66,7 +66,7 @@ export default function CheckoutPortal() {
     phone: "",
     service: SERVICE_OPTIONS[0].label,
     amount: SERVICE_OPTIONS[0].amount,
-    date: "Tuesday, 7th of April, 2026",
+    date: "Thursday, 9th of April, 2026",
     description: "",
     destination: "Campus Gate",
   });
@@ -200,7 +200,7 @@ export default function CheckoutPortal() {
                       onChange={(e) => setDetails({...details, date: e.target.value})}
                       className="w-full bg-slate-50 border border-slate-100 px-6 py-4 rounded-2xl outline-none focus:ring-4 focus:ring-blue-100 focus:border-[#100287] transition-all font-bold text-slate-700 cursor-pointer appearance-none"
                     >
-                       <option value="Tuesday, 7th of April, 2026">Tuesday, 7th of April, 2026</option>
+                       <option value="Thursday, 9th of April, 2026">Thursday, 9th of April, 2026</option>
                     </select>
                  </div>
               </div>
