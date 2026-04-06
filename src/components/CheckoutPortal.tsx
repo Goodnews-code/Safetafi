@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { usePaystackPayment } from "react-paystack";
 
 // ─── Service Pricing ─────────────────────────────────────────────────────────
@@ -59,6 +59,8 @@ export default function CheckoutPortal() {
   const [verifying, setVerifying] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [successRef, setSuccessRef] = useState("");
+  const [settingsLoading, setSettingsLoading] = useState(true);
+  const [paymentsEnabled, setPaymentsEnabled] = useState(false);
 
   const [details, setDetails] = useState({
     name: "",
@@ -66,10 +68,25 @@ export default function CheckoutPortal() {
     phone: "",
     service: SERVICE_OPTIONS[0].label,
     amount: SERVICE_OPTIONS[0].amount,
-    date: "Thursday, 9th of April, 2026",
+    date: "",
     description: "",
     destination: "Campus Gate",
   });
+
+  // Fetch live trip settings on mount
+  useEffect(() => {
+    fetch("/api/public/settings")
+      .then((r) => r.json())
+      .then((data) => {
+        setDetails((prev) => ({ ...prev, date: data.trip_date ?? prev.date }));
+        setPaymentsEnabled(data.payments_enabled ?? false);
+      })
+      .catch(() => {
+        // Keep defaults if API fails
+        setDetails((prev) => ({ ...prev, date: "Tuesday, 7th of April, 2026" }));
+      })
+      .finally(() => setSettingsLoading(false));
+  }, []);
 
   const selectedService = SERVICE_OPTIONS.find((s) => s.label === details.service);
 
@@ -155,7 +172,7 @@ export default function CheckoutPortal() {
           </div>
 
           {step === 'form' && (
-            <form onSubmit={(e) => { e.preventDefault(); setStep('paused'); }} className="space-y-6">
+            <form onSubmit={(e) => { e.preventDefault(); setStep(paymentsEnabled ? 'confirm' : 'paused'); }} className="space-y-6">
 
               <div className="grid md:grid-cols-2 gap-4">
                 <div>
@@ -196,14 +213,14 @@ export default function CheckoutPortal() {
                 </div>
                 <div>
                   <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 ml-1">Schedule Date</label>
-                  <select
-                    value={details.date}
-                    onChange={() => {}} 
-                    disabled
-                    className="w-full bg-slate-50 border border-slate-100 px-6 py-4 rounded-2xl outline-none font-bold text-slate-700 cursor-default appearance-none opacity-100"
-                  >
-                    <option value="Tuesday, 7th of April, 2026">Tuesday, 7th of April, 2026</option>
-                  </select>
+                  <div className="w-full bg-slate-50 border border-slate-100 px-6 py-4 rounded-2xl font-bold text-slate-700 flex items-center gap-2">
+                    <span className="material-symbols-outlined text-slate-400 text-sm">calendar_today</span>
+                    {settingsLoading ? (
+                      <span className="text-slate-300 animate-pulse text-sm">Loading...</span>
+                    ) : (
+                      <span>{details.date}</span>
+                    )}
+                  </div>
                 </div>
               </div>
 
