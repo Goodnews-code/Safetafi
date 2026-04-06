@@ -5,7 +5,7 @@ import { unstable_cache } from "next/cache";
 import AdminActions from "./AdminActions";
 import Sidebar from "./Sidebar";
 import TransactionTable from "./TransactionTable";
-import TripControl from "./TripControl";
+
 
 // Revalidate the page data every 30 seconds to provide fresh data while allowing caching
 export const revalidate = 30;
@@ -172,9 +172,6 @@ export default async function AdminDashboard() {
             </p>
           </div>
         </div>
-
-        {/* Trip Control Panel */}
-        <TripControl />
 
         {/* Transaction Table — searchable client component */}
         <TransactionTable transactions={transactions} />
