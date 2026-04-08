@@ -331,9 +331,9 @@ export default function CheckoutPortal() {
           )}
 
           {step === 'paused' && (
-            <div className="space-y-9 animate-in fade-in zoom-in duration-500">
+            <div className="space-y-5 animate-in fade-in zoom-in duration-500">
               {/* Pulsing icon */}
-              <div className="flex justify-center">
+              <div className="flex justify-center mt-8">
                 <div className="relative">
                   <div className="w-16 h-16 rounded-full bg-amber-50 flex items-center justify-center shadow-inner">
                     <span className="material-symbols-outlined text-3xl text-amber-500">calendar_clock</span>
@@ -347,9 +347,7 @@ export default function CheckoutPortal() {
               {/* Message */}
               <div className="text-center space-y-3">
                 <p className="text-[10px] font-black text-amber-500 uppercase tracking-[0.25em]">Notice</p>
-                <h3 className="text-xl font-black text-slate-900 leading-snug mb-[5px]">
-                  We&apos;ll Be Right Back
-                </h3>
+                {/* Headline removed here to avoid duplication with the main portal header */}
                 <p className="text-slate-500 text-sm font-medium leading-relaxed px-2">
                   We&apos;re sorry &mdash; we are not accepting payments for the
                   <strong className="text-slate-700"> {details.date}</strong> trip at this time.
