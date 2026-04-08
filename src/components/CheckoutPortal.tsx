@@ -347,8 +347,8 @@ export default function CheckoutPortal() {
               {/* Message */}
               <div className="text-center space-y-3">
                 <p className="text-[10px] font-black text-amber-500 uppercase tracking-[0.25em]">Notice</p>
-                <h3 className="text-xl md:text-2xl font-black text-slate-900 leading-snug">
-                  We&apos;ll Be Right Back
+                <h3 className="text-xl font-black text-slate-900 leading-snug">
+                  Bookings for {details.date} are now closed.
                 </h3>
                 <p className="text-slate-500 text-sm font-medium leading-relaxed px-2">
                   We&apos;re sorry &mdash; we are not accepting payments for the
@@ -358,10 +358,11 @@ export default function CheckoutPortal() {
               </div>
 
               {/* Info card */}
-              <div className="bg-amber-50 border border-amber-100 rounded-3xl px-5 py-4 md:px-7 md:py-5 flex items-start gap-3 md:gap-4 mt-2">
-                <span className="material-symbols-outlined text-amber-400 mt-1 md:mt-0.5 shrink-0 text-lg md:text-xl">info</span>
-                <p className="text-[10px] md:text-[11px] text-amber-700 font-bold leading-relaxed">
-                  Booking slots open again once a new trip is announced in our official groups.
+              <div className="bg-amber-50 border border-amber-100 rounded-3xl px-7 py-5 flex items-start gap-4">
+                <span className="material-symbols-outlined text-amber-400 mt-0.5 shrink-0">info</span>
+                <p className="text-[11px] text-amber-700 font-bold leading-relaxed">
+                  Booking slots open again once a new trip is announced.
+                  Follow our WhatsApp channel or check this page again soon.
                 </p>
               </div>
 
