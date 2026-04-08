@@ -331,15 +331,15 @@ export default function CheckoutPortal() {
           )}
 
           {step === 'paused' && (
-            <div className="space-y-4 animate-in fade-in zoom-in duration-500 scale-95 origin-top">
+            <div className="space-y-6 animate-in fade-in zoom-in duration-500">
               {/* Pulsing icon */}
-              <div className="flex justify-center -mb-2">
+              <div className="flex justify-center">
                 <div className="relative">
-                  <div className="w-24 h-24 rounded-full bg-amber-50 flex items-center justify-center shadow-inner">
-                    <span className="material-symbols-outlined text-5xl text-amber-500">calendar_clock</span>
+                  <div className="w-16 h-16 rounded-full bg-amber-50 flex items-center justify-center shadow-inner">
+                    <span className="material-symbols-outlined text-3xl text-amber-500">calendar_clock</span>
                   </div>
-                  <div className="absolute -top-1 -right-1 w-7 h-7 bg-amber-400 rounded-full flex items-center justify-center shadow-md animate-bounce">
-                    <span className="material-symbols-outlined text-white text-sm">priority_high</span>
+                  <div className="absolute -top-1 -right-1 w-6 h-6 bg-amber-400 rounded-full flex items-center justify-center shadow-md animate-bounce">
+                    <span className="material-symbols-outlined text-white text-[10px]">priority_high</span>
                   </div>
                 </div>
               </div>
