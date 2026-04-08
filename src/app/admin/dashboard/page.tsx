@@ -29,7 +29,7 @@ const getRecentTransactions = unstable_cache(
       .from("transactions")
       .select("*")
       .order("created_at", { ascending: false })
-      .limit(100);
+      .limit(1000);
     return JSON.parse(JSON.stringify({ data, error }));
   },
   ["recent-transactions"],

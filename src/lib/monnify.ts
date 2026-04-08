@@ -95,3 +95,35 @@ export async function verifyMonnifyTransaction(transactionReference: string): Pr
         return null;
     }
 }
+
+/**
+ * Search/List transactions from Monnify
+ */
+export async function searchMonnifyTransactions(size: number = 50): Promise<any[]> {
+    const accessToken = await getMonnifyAccessToken();
+    if (!accessToken) return [];
+
+    try {
+        const response = await fetch(
+            `${MONNIFY_BASE_URL}/api/v2/transactions/search?page=0&size=${size}`,
+            {
+                method: "GET",
+                headers: {
+                    Authorization: `Bearer ${accessToken}`,
+                },
+            }
+        );
+
+        const data = await response.json();
+        if (data.requestSuccessful) {
+            // Monnify search returns results in responseBody.content for pagination
+            return data.responseBody.content || [];
+        } else {
+            console.error("Monnify search failed:", data.responseMessage);
+            return [];
+        }
+    } catch (error) {
+        console.error("Monnify search error:", error);
+        return [];
+    }
+}
