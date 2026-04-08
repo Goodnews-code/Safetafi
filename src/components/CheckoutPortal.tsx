@@ -11,43 +11,20 @@ declare global {
 
 // ─── Service Pricing ─────────────────────────────────────────────────────────
 
-const SERVICE_OPTIONS = [
-  {
-    id: "berger",
-    label: "Berger",
-    amount: 11000,
-    icon: "location_on",
-  },
-  {
-    id: "oshodi",
-    label: "Oshodi",
-    amount: 12000,
-    icon: "location_on",
-  },
-  {
-    id: "iyanapaja",
-    label: "Iyanapaja",
-    amount: 12500,
-    icon: "location_on",
-  },
-  {
-    id: "abeokuta",
-    label: "Abeokuta",
-    amount: 12000,
-    icon: "location_on",
-  },
-  {
-    id: "ibadan",
-    label: "Ibadan",
-    amount: 5000,
-    icon: "location_on",
-  },
-  {
-    id: "ikorodu",
-    label: "Ikorodu",
-    amount: 12500,
-    icon: "location_on",
-  },
+interface ServiceOption {
+  id: string;
+  label: string;
+  amount: number;
+  icon: string;
+}
+
+const DEFAULT_SERVICE_OPTIONS: ServiceOption[] = [
+  { id: "berger", label: "Berger", amount: 11000, icon: "location_on" },
+  { id: "oshodi", label: "Oshodi", amount: 12000, icon: "location_on" },
+  { id: "iyanapaja", label: "Iyanapaja", amount: 12500, icon: "location_on" },
+  { id: "abeokuta", label: "Abeokuta", amount: 12000, icon: "location_on" },
+  { id: "ibadan", label: "Ibadan", amount: 5000, icon: "location_on" },
+  { id: "ikorodu", label: "Ikorodu", amount: 12500, icon: "location_on" },
 ];
 
 function formatNaira(amount: number) {
@@ -67,13 +44,14 @@ export default function CheckoutPortal() {
   const [successRef, setSuccessRef] = useState("");
   const [settingsLoading, setSettingsLoading] = useState(true);
   const [paymentsEnabled, setPaymentsEnabled] = useState(false);
+  const [serviceOptions, setServiceOptions] = useState<ServiceOption[]>(DEFAULT_SERVICE_OPTIONS);
 
   const [details, setDetails] = useState({
     name: "",
     email: "",
     phone: "",
-    service: SERVICE_OPTIONS[0].label,
-    amount: SERVICE_OPTIONS[0].amount,
+    service: DEFAULT_SERVICE_OPTIONS[0].label,
+    amount: DEFAULT_SERVICE_OPTIONS[0].amount,
     date: "",
     description: "",
     destination: "Campus Gate",
@@ -84,8 +62,17 @@ export default function CheckoutPortal() {
     fetch("/api/public/settings")
       .then((r) => r.json())
       .then((data) => {
-        setDetails((prev) => ({ ...prev, date: data.trip_date ?? prev.date }));
+        setDetails((prev) => ({ 
+          ...prev, 
+          date: data.trip_date ?? prev.date,
+          // If we haven't selected a service yet, update to the first live one
+          service: prev.service || (data.service_pricing?.[0]?.label ?? prev.service),
+          amount: prev.amount || (data.service_pricing?.[0]?.amount ?? prev.amount)
+        }));
         setPaymentsEnabled(data.payments_enabled ?? false);
+        if (data.service_pricing) {
+          setServiceOptions(data.service_pricing);
+        }
       })
       .catch(() => {
         // Keep defaults if API fails
@@ -106,7 +93,7 @@ export default function CheckoutPortal() {
     }
   }, []);
 
-  const selectedService = SERVICE_OPTIONS.find((s) => s.label === details.service);
+  const selectedService = serviceOptions.find((s) => s.label === details.service);
 
   // Paystack Config
   const publicKey = process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY || "";
@@ -281,7 +268,7 @@ export default function CheckoutPortal() {
                 <div>
                   <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 ml-1">Schedule Date</label>
                   <div className="w-full bg-slate-50 border border-slate-100 px-6 py-4 rounded-2xl font-bold text-slate-700 flex items-center gap-2">
-                    <span className="material-symbols-outlined text-slate-400 text-sm">calendar_today</span>
+                    <span className="material-symbols-outlined text-[#E7B036] text-sm">calendar_today</span>
                     {settingsLoading ? (
                       <span className="text-slate-300 animate-pulse text-sm">Loading...</span>
                     ) : (
@@ -309,7 +296,7 @@ export default function CheckoutPortal() {
               <div>
                 <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 ml-1">Select Meeting Point</label>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                  {SERVICE_OPTIONS.map((svc) => (
+                  {serviceOptions.map((svc) => (
                     <button
                       key={svc.id}
                       type="button"
@@ -317,7 +304,7 @@ export default function CheckoutPortal() {
                       className={`flex items-center justify-between p-4 rounded-2xl border-2 transition-all text-left ${details.service === svc.label ? 'border-[#100287] bg-blue-50' : 'border-slate-100 bg-white hover:border-slate-200'}`}
                     >
                       <div className="flex items-center gap-3">
-                        <span className={`material-symbols-outlined text-sm ${details.service === svc.label ? 'text-[#100287]' : 'text-slate-400'}`}>{svc.icon}</span>
+                        <span className={`material-symbols-outlined text-sm ${details.service === svc.label ? 'text-[#100287]' : 'text-[#E7B036]'}`}>{svc.icon}</span>
                         <span className={`text-[11px] font-black uppercase tracking-tight ${details.service === svc.label ? 'text-[#100287]' : 'text-slate-600'}`}>{svc.label}</span>
                       </div>
                       {svc.amount > 0 && <span className="text-[10px] font-black text-slate-400">{formatNaira(svc.amount)}</span>}
@@ -387,25 +374,25 @@ export default function CheckoutPortal() {
             <div className="space-y-8 animate-in fade-in zoom-in duration-500">
               <div className="bg-[#F4F7FA] rounded-3xl p-8 border border-slate-200 relative overflow-hidden">
                 <div className="space-y-4 relative z-10">
-                  <div className="flex justify-between border-b border-slate-200 pb-4">
+                  <div className="flex flex-col md:flex-row md:items-center justify-between border-b border-slate-200 pb-4 gap-1 md:gap-0">
                     <span className="text-xs font-black text-slate-400 uppercase tracking-widest">Client</span>
-                    <span className="text-sm font-black text-slate-900">{details.name}</span>
+                    <span className="text-sm font-black text-slate-900 md:text-right w-full md:w-auto">{details.name}</span>
                   </div>
-                  <div className="flex justify-between border-b border-slate-200 pb-4">
+                  <div className="flex flex-col md:flex-row md:items-center justify-between border-b border-slate-200 pb-4 gap-1 md:gap-0">
                     <span className="text-xs font-black text-slate-400 uppercase tracking-widest">Meeting Point</span>
-                    <span className="text-sm font-black text-slate-900">{details.service}</span>
+                    <span className="text-sm font-black text-slate-900 md:text-right w-full md:w-auto">{details.service}</span>
                   </div>
-                  <div className="flex justify-between border-b border-slate-200 pb-4">
+                  <div className="flex flex-col md:flex-row md:items-center justify-between border-b border-slate-200 pb-4 gap-1 md:gap-0">
                     <span className="text-xs font-black text-slate-400 uppercase tracking-widest">Destination</span>
-                    <span className="text-sm font-black text-slate-900">{details.destination}</span>
+                    <span className="text-sm font-black text-slate-900 md:text-right w-full md:w-auto">{details.destination}</span>
                   </div>
-                  <div className="flex justify-between border-b border-slate-200 pb-4">
+                  <div className="flex flex-col md:flex-row md:items-center justify-between border-b border-slate-200 pb-4 gap-1 md:gap-0">
                     <span className="text-xs font-black text-slate-400 uppercase tracking-widest">Scheduled</span>
-                    <span className="text-sm font-black text-[#E7B036]">{details.date}</span>
+                    <span className="text-sm font-black text-[#E7B036] md:text-right w-full md:w-auto">{details.date}</span>
                   </div>
-                  <div className="flex justify-between pt-2">
+                  <div className="flex flex-col md:flex-row md:items-center justify-between pt-2 gap-1 md:gap-0">
                     <span className="text-lg font-black text-slate-900">Total Price</span>
-                    <span className="text-2xl font-black text-[#100287]">{formatNaira(details.amount)}</span>
+                    <span className="text-2xl font-black text-[#100287] md:text-right w-full md:w-auto">{formatNaira(details.amount)}</span>
                   </div>
                 </div>
               </div>
@@ -416,7 +403,7 @@ export default function CheckoutPortal() {
                   <p className="text-slate-600 font-black animate-pulse uppercase text-xs tracking-widest">Syncing Ledger...</p>
                 </div>
               ) : (
-                <div className="flex gap-4">
+                <div className="flex flex-col sm:flex-row gap-3">
                   <button
                     onClick={() => setStep('form')}
                     className="flex-1 border-2 border-slate-100 text-slate-500 py-5 rounded-2xl font-black hover:bg-slate-50 transition-all uppercase text-[10px] tracking-widest"

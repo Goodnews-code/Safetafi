@@ -2,6 +2,7 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import Sidebar from "../Sidebar";
 import TripControl from "../TripControl";
+import PricingControl from "../PricingControl";
 
 export default async function TripControlPage() {
   const cookieStore = await cookies();
@@ -37,6 +38,9 @@ export default async function TripControlPage() {
 
         {/* Trip Control Panel */}
         <TripControl />
+
+        {/* Pricing Management Panel */}
+        <PricingControl />
 
         {/* Info Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
