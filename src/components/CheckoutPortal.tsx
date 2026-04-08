@@ -347,8 +347,8 @@ export default function CheckoutPortal() {
               {/* Message */}
               <div className="text-center space-y-3">
                 <p className="text-[10px] font-black text-amber-500 uppercase tracking-[0.25em]">Notice</p>
-                <h3 className="text-xl font-black text-slate-900 leading-snug">
-                  Bookings for {details.date} are now closed.
+                <h3 className="text-xl font-black text-slate-900 leading-snug mb-[5px]">
+                  We&apos;ll Be Right Back
                 </h3>
                 <p className="text-slate-500 text-sm font-medium leading-relaxed px-2">
                   We&apos;re sorry &mdash; we are not accepting payments for the
