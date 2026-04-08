@@ -21,6 +21,7 @@ interface Transaction {
 
 interface TransactionTableProps {
   transactions: Transaction[];
+  title?: string;
 }
 
 function formatNaira(amt: number) {
@@ -42,7 +43,7 @@ function formatDate(dateStr: string | null) {
   });
 }
 
-export default function TransactionTable({ transactions }: TransactionTableProps) {
+export default function TransactionTable({ transactions, title = "All Orders" }: TransactionTableProps) {
   const [searchTerm, setSearchTerm] = useState("");
 
   const filtered = transactions.filter((tr) => {
@@ -67,7 +68,7 @@ export default function TransactionTable({ transactions }: TransactionTableProps
       {/* Table Header with Search */}
       <div className="px-8 py-6 border-b border-slate-100 flex items-center justify-between gap-4 flex-wrap">
         <h4 className="font-black text-slate-900 uppercase tracking-widest text-sm">
-          All Orders
+          {title}
           {searchTerm && (
             <span className="ml-3 text-[10px] font-bold text-[#0047BB] bg-blue-50 px-2.5 py-1 rounded-full border border-blue-100">
               {filtered.length} result{filtered.length !== 1 ? "s" : ""}

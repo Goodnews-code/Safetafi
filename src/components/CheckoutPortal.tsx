@@ -3,6 +3,12 @@
 import { useState, useEffect } from "react";
 import { usePaystackPayment } from "react-paystack";
 
+declare global {
+  interface Window {
+    MonnifySDK: any;
+  }
+}
+
 // ─── Service Pricing ─────────────────────────────────────────────────────────
 
 const SERVICE_OPTIONS = [
@@ -86,6 +92,18 @@ export default function CheckoutPortal() {
         setDetails((prev) => ({ ...prev, date: "Tuesday, 7th of April, 2026" }));
       })
       .finally(() => setSettingsLoading(false));
+
+    // Load Monnify SDK if needed
+    const gateway = process.env.NEXT_PUBLIC_PAYMENT_GATEWAY || "paystack";
+    if (gateway === "monnify" || gateway === "both") {
+      const script = document.createElement("script");
+      script.src = "https://sdk.monnify.com/plugin/monnify.js";
+      script.async = true;
+      document.body.appendChild(script);
+      return () => {
+        document.body.removeChild(script);
+      }
+    }
   }, []);
 
   const selectedService = SERVICE_OPTIONS.find((s) => s.label === details.service);
@@ -115,11 +133,12 @@ export default function CheckoutPortal() {
 
   const initializePayment = usePaystackPayment(config);
 
-  const handleVerify = async (ref: string) => {
+  const handleVerify = async (ref: string, gateway: "paystack" | "monnify" = "paystack") => {
     setVerifying(true);
     setErrorMessage("");
     try {
-      const res = await fetch("/api/paystack/verify", {
+      const endpoint = gateway === "monnify" ? "/api/monnify/verify" : "/api/paystack/verify";
+      const res = await fetch(endpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ reference: ref }),
@@ -140,11 +159,59 @@ export default function CheckoutPortal() {
     }
   };
 
-  const handlePay = () => {
+  const handlePaystackPay = () => {
     initializePayment({
-      onSuccess: (response: any) => handleVerify(response.reference),
+      onSuccess: (response: any) => handleVerify(response.reference, "paystack"),
       onClose: () => { },
     });
+  };
+
+  const handleMonnifyPay = () => {
+    if (!window.MonnifySDK) {
+      setErrorMessage("Monnify SDK not loaded. Please refresh the page.");
+      setStep("failed");
+      return;
+    }
+
+    window.MonnifySDK.initialize({
+      amount: details.amount,
+      currency: "NGN",
+      reference: `SFTF_MON_${Date.now()}`,
+      customerFullName: details.name,
+      customerEmail: details.email,
+      apiKey: process.env.NEXT_PUBLIC_MONNIFY_API_KEY,
+      contractCode: process.env.NEXT_PUBLIC_MONNIFY_CONTRACT_CODE,
+      paymentDescription: `Booking for ${details.service} - ${details.date}`,
+      metadata: {
+        name: details.name,
+        phone: details.phone,
+        service: details.service,
+        destination: details.destination,
+        date: details.date,
+        description: details.description,
+      },
+      onComplete: function (response: any) {
+        if (response.status === "SUCCESS") {
+          handleVerify(response.transactionReference, "monnify");
+        } else {
+          setErrorMessage(response.message || "Monnify payment failed.");
+          setStep("failed");
+        }
+      },
+      onClose: function (data: any) {
+        // Modal closed
+      }
+    });
+  };
+
+  const selectedGateway = process.env.NEXT_PUBLIC_PAYMENT_GATEWAY || "paystack";
+
+  const handlePay = () => {
+    if (selectedGateway === "monnify") {
+      handleMonnifyPay();
+    } else {
+      handlePaystackPay();
+    }
   };
 
   return (
@@ -356,10 +423,15 @@ export default function CheckoutPortal() {
                   >
                     Back
                   </button>
-                  {!publicKey ? (
+                  {!publicKey && selectedGateway === "paystack" ? (
                     <div className="flex-1 bg-amber-50 border border-amber-200 p-4 rounded-2xl flex flex-col items-center gap-2 text-center animate-pulse">
                       <span className="material-symbols-outlined text-amber-600">settings_suggest</span>
-                      <p className="text-[10px] font-black text-amber-700 uppercase tracking-widest">Configuration Error: PAYSTACK_PUBLIC_KEY Missing on Netlify</p>
+                      <p className="text-[10px] font-black text-amber-700 uppercase tracking-widest">Configuration Error: PAYSTACK_PUBLIC_KEY Missing</p>
+                    </div>
+                  ) : !process.env.NEXT_PUBLIC_MONNIFY_API_KEY && selectedGateway === "monnify" ? (
+                    <div className="flex-1 bg-amber-50 border border-amber-200 p-4 rounded-2xl flex flex-col items-center gap-2 text-center animate-pulse">
+                      <span className="material-symbols-outlined text-amber-600">settings_suggest</span>
+                      <p className="text-[10px] font-black text-amber-700 uppercase tracking-widest">Configuration Error: MONNIFY_API_KEY Missing</p>
                     </div>
                   ) : (
                     <button
@@ -367,7 +439,7 @@ export default function CheckoutPortal() {
                       className="flex-[2] bg-[#100287] text-white py-5 rounded-2xl font-black text-lg hover:bg-[#030301] transition-all shadow-xl shadow-blue-600/30 flex items-center justify-center gap-3"
                     >
                       <span className="material-symbols-outlined">lock</span>
-                      Pay Securely
+                      Pay Securely {selectedGateway === 'monnify' ? 'via Monnify' : 'via Paystack'}
                     </button>
                   )}
                 </div>
