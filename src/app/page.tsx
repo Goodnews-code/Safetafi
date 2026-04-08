@@ -10,17 +10,17 @@ const CheckoutPortal = dynamic(() => import("@/components/CheckoutPortal"), {
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-[#F4F7FA] relative overflow-hidden flex flex-col font-sans">
+    <div className="min-h-screen bg-[#F4F7FA] relative overflow-x-hidden flex flex-col font-sans">
       
-      {/* Dynamic Glass Background Shapes */}
-      <div className="absolute top-[-10%] right-[-10%] w-[50%] h-[50%] bg-[#100287] opacity-[0.05] rounded-full blur-[120px] animate-pulse" />
-      <div className="absolute bottom-[-10%] left-[-10%] w-[40%] h-[40%] bg-[#E7B036] opacity-[0.05] rounded-full blur-[100px] animate-pulse duration-[5s]" />
-
-      {/* Grid Pattern Layer */}
-      <div className="absolute inset-0 opacity-[0.03] pattern-grid-lg pointer-events-none" />
+      {/* Background Decor Layer - Clipped */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-[-10%] right-[-10%] w-[50%] h-[50%] bg-[#100287] opacity-[0.05] rounded-full blur-[120px] animate-pulse" />
+        <div className="absolute bottom-[-10%] left-[-10%] w-[40%] h-[40%] bg-[#E7B036] opacity-[0.05] rounded-full blur-[100px] animate-pulse duration-[5s]" />
+        <div className="absolute inset-0 opacity-[0.03] pattern-grid-lg" />
+      </div>
 
       {/* Main Content Area */}
-      <main className="flex-1 flex flex-col items-center justify-center p-6 relative z-10 py-20 lg:py-32">
+      <main className="flex-1 flex flex-col items-center justify-start p-6 relative z-10 py-12 lg:py-20 gap-8">
         
         {/* Trifecta Brand Anchors - Absolute Scroll positioning */}
         {/* TOP CENTER */}
@@ -45,8 +45,8 @@ export default function Home() {
         </div>
 
         {/* Branding */}
-        <div className="text-center mb-16 animate-in fade-in slide-in-from-top-10 duration-1000">
-           <div className="flex items-center justify-center mb-12">
+        <div className="text-center mb-8 animate-in fade-in slide-in-from-top-10 duration-1000">
+           <div className="flex items-center justify-center mb-6">
               <div className="relative group p-6 transition-all duration-700 hover:scale-110 active:scale-95">
                  <img 
                    src="/logo.svg" 

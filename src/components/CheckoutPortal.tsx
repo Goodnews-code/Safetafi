@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { usePaystackPayment } from "react-paystack";
 
 declare global {
@@ -38,6 +38,7 @@ function formatNaira(amount: number) {
 // ─── Component ───────────────────────────────────────────────────────────────
 
 export default function CheckoutPortal() {
+  const portalRef = useRef<HTMLDivElement>(null);
   const [step, setStep] = useState<"form" | "paused" | "confirm" | "success" | "failed">("form");
   const [verifying, setVerifying] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
@@ -92,6 +93,13 @@ export default function CheckoutPortal() {
       }
     }
   }, []);
+
+  // Scroll to top of portal when step changes to 'paused'
+  useEffect(() => {
+    if (step === 'paused' && portalRef.current) {
+      portalRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }, [step]);
 
   const selectedService = serviceOptions.find((s) => s.label === details.service);
 
@@ -202,7 +210,7 @@ export default function CheckoutPortal() {
   };
 
   return (
-    <div className="w-full max-w-xl mx-auto">
+    <div ref={portalRef} className="w-full max-w-xl mx-auto scroll-mt-24">
       <div className="bg-white/90 backdrop-blur-3xl rounded-[3rem] shadow-2xl shadow-blue-900/10 border border-white/50 overflow-hidden relative group">
 
         <div className="absolute top-0 inset-x-0 h-1.5 flex gap-1 px-1 py-1">
@@ -212,9 +220,9 @@ export default function CheckoutPortal() {
                   step === 'success' ? 'w-full bg-green-500' : 'w-full bg-red-500'}`} />
         </div>
 
-        <div className="p-10 pt-14">
+        <div className={`p-8 md:p-10 ${step === 'paused' ? 'pt-2 pb-2' : 'pt-10 md:pt-12'}`}>
 
-          <div className="mb-10 text-center">
+          <div className={`${step === 'paused' ? 'mb-2' : 'mb-8'} text-center`}>
             <img src="/logo.svg" alt="Safetafi" className="h-10 mx-auto mb-4" />
             <h2 className="text-3xl font-black text-slate-900 tracking-tight">
               {step === 'form' && "Book Your Express Service"}
@@ -323,9 +331,9 @@ export default function CheckoutPortal() {
           )}
 
           {step === 'paused' && (
-            <div className="space-y-8 animate-in fade-in zoom-in duration-500">
+            <div className="space-y-4 animate-in fade-in zoom-in duration-500 scale-95 origin-top">
               {/* Pulsing icon */}
-              <div className="flex justify-center">
+              <div className="flex justify-center -mb-2">
                 <div className="relative">
                   <div className="w-24 h-24 rounded-full bg-amber-50 flex items-center justify-center shadow-inner">
                     <span className="material-symbols-outlined text-5xl text-amber-500">calendar_clock</span>
@@ -360,9 +368,18 @@ export default function CheckoutPortal() {
 
               {/* Actions */}
               <div className="flex flex-col gap-3">
+                <a
+                  href="https://wa.me/2347070855579"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full bg-[#1FB34F] text-white py-5 rounded-2xl font-black hover:bg-[#19B14B] transition-all flex items-center justify-center gap-2 shadow-lg shadow-green-500/10"
+                >
+                  <span className="material-symbols-outlined">chat</span>
+                  WhatsApp Inquiries
+                </a>
                 <button
                   onClick={() => setStep('form')}
-                  className="w-full border-2 border-slate-100 text-slate-500 py-5 rounded-2xl font-black hover:bg-slate-50 transition-all uppercase text-[10px] tracking-widest"
+                  className="w-full border-2 border-slate-100 text-slate-500 py-4 rounded-2xl font-black hover:bg-slate-50 transition-all uppercase text-[10px] tracking-widest"
                 >
                   ← Go Back
                 </button>

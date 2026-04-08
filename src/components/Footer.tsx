@@ -33,7 +33,7 @@ export default function Footer() {
         </div>
 
         {/* Bottom bar */}
-        <div className="w-full flex flex-col md:flex-row justify-between items-center gap-10 border-t border-white/5 pt-14 text-center md:text-left">
+        <div className="w-full flex flex-col md:flex-row justify-between items-center gap-10 border-t border-white/5 pt-14 px-6 text-center md:text-left">
           
           <div className="flex flex-col gap-2 items-center md:items-start text-center md:text-left">
              <p className="text-slate-500 text-sm font-black tracking-[0.25em] uppercase">
