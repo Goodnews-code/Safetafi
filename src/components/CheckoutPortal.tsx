@@ -331,7 +331,7 @@ export default function CheckoutPortal() {
           )}
 
           {step === 'paused' && (
-            <div className="space-y-6 animate-in fade-in zoom-in duration-500">
+            <div className="space-y-9 animate-in fade-in zoom-in duration-500">
               {/* Pulsing icon */}
               <div className="flex justify-center">
                 <div className="relative">
