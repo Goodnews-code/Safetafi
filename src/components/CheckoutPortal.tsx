@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { usePaystackPayment } from "react-paystack";
+import Script from "next/script";
 
 declare global {
   interface Window {
@@ -80,18 +81,6 @@ export default function CheckoutPortal() {
         setDetails((prev) => ({ ...prev, date: "Tuesday, 7th of April, 2026" }));
       })
       .finally(() => setSettingsLoading(false));
-
-    // Load Monnify SDK if needed
-    const gateway = process.env.NEXT_PUBLIC_PAYMENT_GATEWAY || "paystack";
-    if (gateway === "monnify" || gateway === "both") {
-      const script = document.createElement("script");
-      script.src = "https://sdk.monnify.com/plugin/monnify.js";
-      script.async = true;
-      document.body.appendChild(script);
-      return () => {
-        document.body.removeChild(script);
-      }
-    }
   }, []);
 
   // Scroll to top of portal when step changes to 'paused'
@@ -210,7 +199,11 @@ export default function CheckoutPortal() {
   };
 
   return (
-    <div ref={portalRef} className="w-full max-w-xl mx-auto scroll-mt-24">
+    <>
+      {(selectedGateway === "monnify" || selectedGateway === "both") && (
+        <Script src="https://sdk.monnify.com/plugin/monnify.js" strategy="lazyOnload" />
+      )}
+      <div ref={portalRef} className="w-full max-w-xl mx-auto scroll-mt-24">
       <div className="bg-white/90 backdrop-blur-3xl rounded-[3rem] shadow-2xl shadow-blue-900/10 border border-white/50 overflow-hidden relative group">
 
         <div className="absolute top-0 inset-x-0 h-1.5 flex gap-1 px-1 py-1">
@@ -504,5 +497,6 @@ export default function CheckoutPortal() {
         </div>
       </div>
     </div>
+    </>
   );
 }
