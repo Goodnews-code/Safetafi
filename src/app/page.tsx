@@ -1,12 +1,17 @@
-"use client";
+import type { Metadata } from "next";
 
 import dynamic from "next/dynamic";
 import Footer from "@/components/Footer";
 
-const CheckoutPortal = dynamic(() => import("@/components/CheckoutPortal"), { 
+const CheckoutPortal = dynamic(() => import("@/components/CheckoutPortal"), {
   ssr: false,
-  loading: () => <div className="w-full max-w-xl h-[600px] bg-white/50 animate-pulse rounded-[3rem] mx-auto" />
+  loading: () => <div className="w-full max-w-xl h-[600px] bg-white/80 rounded-[3rem] mx-auto" />,
 });
+
+export const metadata: Metadata = {
+  title: "Book Your Trip | Safetafi Express",
+  description: "Secure your seat on the next Safetafi trip. Select your meeting point and pay safely online.",
+};
 
 export default function Home() {
   return (
@@ -22,30 +27,8 @@ export default function Home() {
       {/* Main Content Area */}
       <main className="flex-1 flex flex-col items-center justify-start p-6 relative z-10 py-12 lg:py-20 gap-8">
         
-        {/* Trifecta Brand Anchors - Absolute Scroll positioning */}
-        {/* TOP CENTER */}
-        <div className="hidden md:block absolute top-12 left-1/2 -translate-x-1/2 opacity-[0.02] pointer-events-none select-none z-0 whitespace-nowrap leading-none transition-opacity duration-1000">
-           <h2 className="text-[14rem] font-black tracking-tighter text-slate-900 leading-none uppercase italic">
-             SAFETAFI
-           </h2>
-        </div>
-
-        {/* LEFT EDGE */}
-        <div className="hidden md:block absolute -left-24 top-1/2 -translate-y-1/2 opacity-[0.02] pointer-events-none select-none z-0 transform -rotate-90 origin-center whitespace-nowrap leading-none transition-opacity duration-1000">
-           <h2 className="text-[12rem] font-black tracking-tighter text-slate-900 leading-none uppercase italic">
-             SAFETAFI
-           </h2>
-        </div>
-
-        {/* RIGHT EDGE */}
-        <div className="hidden md:block absolute -right-24 top-1/2 -translate-y-1/2 opacity-[0.02] pointer-events-none select-none z-0 transform rotate-90 origin-center whitespace-nowrap leading-none transition-opacity duration-1000">
-           <h2 className="text-[12rem] font-black tracking-tighter text-slate-900 leading-none uppercase italic text-right">
-             SAFETAFI
-           </h2>
-        </div>
-
         {/* Branding */}
-        <div className="text-center mb-8 animate-in fade-in slide-in-from-top-10 duration-1000">
+        <div className="text-center mb-8 animate-in fade-in duration-300">
            <div className="flex items-center justify-center mb-6">
               <div className="relative group p-6 transition-all duration-700 hover:scale-110 active:scale-95">
                  <img 
