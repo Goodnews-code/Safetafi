@@ -1,12 +1,7 @@
 import type { Metadata } from "next";
 
-import dynamic from "next/dynamic";
 import Footer from "@/components/Footer";
-
-const CheckoutPortal = dynamic(() => import("@/components/CheckoutPortal"), {
-  ssr: false,
-  loading: () => <div className="w-full max-w-xl h-[600px] bg-white/80 rounded-[3rem] mx-auto" />,
-});
+import DynamicCheckoutPortal from "@/components/DynamicCheckoutPortal";
 
 export const metadata: Metadata = {
   title: "Book Your Trip | Safetafi Express",
@@ -48,7 +43,7 @@ export default function Home() {
         </div>
 
         {/* The Payment Portal Checkout Card */}
-        <CheckoutPortal />
+        <DynamicCheckoutPortal />
 
         {/* Security badges */}
         <div className="mt-12 flex flex-wrap justify-center items-center gap-8 opacity-20 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-700">
