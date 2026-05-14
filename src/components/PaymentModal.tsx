@@ -199,12 +199,22 @@ function PaystackCheckout({
           </button>
           <button
             type="button"
-            onClick={() =>
+            onClick={() => {
+              // Fallback to dummy demo mode if Paystack is not configured
+              if (!publicKey || publicKey.includes("your_paystack_public_key")) {
+                setVerifying(true);
+                setTimeout(() => {
+                  setVerifying(false);
+                  onSuccess(`DEMO_REF_${Math.floor(Math.random() * 10000000)}`, { dummy: true });
+                }, 1500);
+                return;
+              }
+              
               initializePayment({
                 onSuccess: onPaystackSuccess,
                 onClose: () => {},
-              })
-            }
+              });
+            }}
             className="flex-[2] bg-[#0047BB] text-white py-4 rounded-2xl font-black hover:bg-[#001B44] transition-all shadow-xl shadow-blue-600/20 flex items-center justify-center gap-2"
           >
             <span className="material-symbols-outlined text-xl">lock</span>
