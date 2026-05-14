@@ -1,6 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import { revalidatePath } from "next/cache";
-import { getSupabase } from "@/lib/supabase";
 
 export async function POST(req: NextRequest) {
   try {
@@ -31,6 +29,7 @@ export async function POST(req: NextRequest) {
         },
       }
     );
+
     const data = await paystackRes.json();
 
     if (!data.status || data.data?.status !== "success") {
@@ -44,74 +43,24 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Payment is verified — now save to Supabase
+    // Payment is verified
     const transaction = data.data;
 
-    // 1. Map metadata fields
-    const metadataFields = transaction.metadata?.custom_fields || [];
-    const getMetaValue = (key: string) => metadataFields.find((f: any) => f.variable_name === key)?.value || "";
-    
-    const dbTransaction = {
-      reference: transaction.reference,
-      amount: transaction.amount / 100, // Convert from kobo to Naira
-      currency: transaction.currency,
-      email: transaction.customer?.email,
-      phone: getMetaValue("phone"),
-      customer_name: getMetaValue("name"),
-      service: getMetaValue("service"),
-      destination: getMetaValue("destination"),
-      date: getMetaValue("date"),
-      description: getMetaValue("description"),
-      status: transaction.status,
-      paid_at: transaction.paid_at,
-    };
-
-    // 2. Insert into Supabase (if not already there via webhook)
-    const supabase = getSupabase();
-    
-    const { data: existing } = await supabase
-      .from("transactions")
-      .select("reference")
-      .eq("reference", transaction.reference)
-      .maybeSingle();
-
-    if (existing) {
-        console.log(`Transaction ${transaction.reference} already via Webhook. Redirecting to success.`);
-        revalidatePath("/admin/dashboard");
-        return NextResponse.json({
-          status: true,
-          message: "Payment already verified and recorded.",
-          data: { reference: transaction.reference },
-        });
-    }
-
-    const { error: dbError } = await supabase
-      .from("transactions")
-      .insert([dbTransaction]);
-
-    if (dbError) {
-      console.error("Supabase insert error:", dbError);
-      return NextResponse.json(
-        { 
-          status: false, 
-          message: "Payment verified but failed to save to ledger. Please contact support.",
-          error: dbError.message 
-        },
-        { status: 500 }
-      );
-    }
-
-    // Bust the dashboard cache so the admin dashboard shows fresh data
-    revalidatePath("/admin/dashboard");
+    // ✅ Here you can:
+    // 1. Save payment record to your database
+    // 2. Send confirmation email via Nodemailer / Resend / EmailJS
+    // 3. Trigger any post-payment business logic
 
     return NextResponse.json({
       status: true,
-      message: "Payment verified and recorded successfully.",
+      message: "Payment verified successfully.",
       data: {
         reference: transaction.reference,
-        amount: transaction.amount / 100,
+        amount: transaction.amount / 100, // Convert from kobo to Naira
+        currency: transaction.currency,
         email: transaction.customer?.email,
         paidAt: transaction.paid_at,
+        channel: transaction.channel,
         metadata: transaction.metadata,
       },
     });
