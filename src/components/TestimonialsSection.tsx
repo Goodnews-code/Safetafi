@@ -23,14 +23,14 @@ const testimonials = [
     initials: "OT",
     name: "Olawale Tunde",
     title: "CEO, Tunde Enterprises",
-    bgColor: "#FF8C00",
+    bgColor: "#E7B036",
     featured: false,
   },
 ];
 
 function StarRating() {
   return (
-    <div className="flex gap-1 text-[#FF8C00] mb-8">
+    <div className="flex gap-1 text-[#E7B036] mb-8">
       {[...Array(5)].map((_, i) => (
         <span key={i} className="material-symbols-outlined fill-1 text-xl">
           star
@@ -60,13 +60,13 @@ export default function TestimonialsSection() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Header */}
         <div className="text-center mb-24">
-          <span className="text-[#FF8C00] font-bold tracking-[0.4em] uppercase text-xs mb-4 block">
+          <span className="text-[#E7B036] font-bold tracking-[0.4em] uppercase text-xs mb-4 block">
             Proven Performance
           </span>
           <h2 className="text-5xl lg:text-6xl font-black mb-6">
             Trusted Across Nigeria
           </h2>
-          <div className="w-24 h-1 bg-[#FF8C00] mx-auto rounded-full" />
+          <div className="w-24 h-1 bg-[#E7B036] mx-auto rounded-full" />
         </div>
 
         {/* Cards */}
@@ -119,7 +119,7 @@ export default function TestimonialsSection() {
                   </div>
                   <div>
                     <p className="font-black text-white">{t.name}</p>
-                    <p className="text-xs font-bold text-[#FF8C00] uppercase tracking-widest">
+                    <p className="text-xs font-bold text-[#E7B036] uppercase tracking-widest">
                       {t.title}
                     </p>
                   </div>
