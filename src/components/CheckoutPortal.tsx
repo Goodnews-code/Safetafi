@@ -204,7 +204,7 @@ export default function CheckoutPortal() {
         <Script src="https://sdk.monnify.com/plugin/monnify.js" strategy="lazyOnload" />
       )}
       <div ref={portalRef} className="w-full max-w-xl mx-auto scroll-mt-24">
-      <div className="bg-white/90 backdrop-blur-3xl rounded-[3rem] shadow-2xl shadow-blue-900/10 border border-white/50 overflow-hidden relative group">
+      <div className="bg-white/95 rounded-[3rem] shadow-2xl shadow-blue-900/10 border border-white/50 overflow-hidden relative group">
 
         <div className="absolute top-0 inset-x-0 h-1.5 flex gap-1 px-1 py-1">
           <div className={`h-full rounded-full transition-all duration-700 ${step === 'form' ? 'w-1/4 bg-[#100287]' :

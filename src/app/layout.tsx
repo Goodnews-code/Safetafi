@@ -38,14 +38,10 @@ export default function RootLayout({
           href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&display=block"
           as="style"
         />
-        {/* Non-render-blocking load: media=print means browser fetches without blocking paint,
-            onLoad swaps it to media=all once loaded so icons appear */}
+        {/* Material Symbols Outlined */}
         <link
           rel="stylesheet"
           href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&display=block"
-          media="print"
-          // @ts-ignore – onLoad on link is valid HTML but not in React types
-          onLoad="this.media='all'"
         />
         <noscript>
           <link
