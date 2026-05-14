@@ -33,13 +33,11 @@ export default function Navbar({ onPayNowClick }: NavbarProps) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-20">
           {/* Logo */}
-          <a href="#" className="flex items-center group relative py-2">
-            <img 
-               src="/logo.svg" 
-               alt="Safetafi" 
-               className="h-10 md:h-12 w-auto transition-transform duration-300 group-hover:scale-105" 
-               fetchPriority="high"
-            />
+          <a href="#" className="flex items-center group">
+            <span className="text-2xl font-black tracking-tight">
+              <span className="text-[#0047BB]">SAFE</span>
+              <span className="text-[#FF8C00]">TAFI</span>
+            </span>
           </a>
 
           {/* Desktop Nav */}

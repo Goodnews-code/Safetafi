@@ -22,7 +22,7 @@ export default function AboutSection() {
                 of commercial Nigeria, we provide the infrastructure businesses
                 need to scale.
               </p>
-              <blockquote className="border-l-4 border-[#E7B036] pl-6 italic font-medium text-slate-800 text-xl">
+              <blockquote className="border-l-4 border-[#FF8C00] pl-6 italic font-medium text-slate-800 text-xl">
                 &ldquo;We don&apos;t just move boxes; we move the dreams and
                 inventory that power a nation.&rdquo;
               </blockquote>
@@ -32,7 +32,7 @@ export default function AboutSection() {
             <div className="flex flex-wrap gap-6 mt-14">
               <div className="bg-white p-8 rounded-3xl shadow-sm border border-slate-200/60 flex-1 min-w-[180px] hover:shadow-md transition-shadow">
                 <div className="text-5xl font-black text-[#0047BB] mb-2">
-                  100<span className="text-[#E7B036]">%</span>
+                  100<span className="text-[#FF8C00]">%</span>
                 </div>
                 <div className="text-xs font-bold text-slate-500 uppercase tracking-widest">
                   Secure Handover

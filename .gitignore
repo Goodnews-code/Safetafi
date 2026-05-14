@@ -33,15 +33,6 @@ yarn-error.log*
 # env files (can opt-in for committing if needed)
 .env*
 
-# archived / unused files
-/src/app/_archive/
-/src/components/PaymentModal.tsx
-build.log
-build_failed*.txt
-
-# local developer notes
-DEV_NOTES.md
-
 # vercel
 .vercel
 

@@ -42,7 +42,7 @@ export default function WhyUsSection() {
                   ${
                     f.color === "primary"
                       ? "bg-blue-50 group-hover:bg-[#0047BB]"
-                      : "bg-orange-50 group-hover:bg-[#E7B036]"
+                      : "bg-orange-50 group-hover:bg-[#FF8C00]"
                   }`}
               >
                 <span
@@ -50,7 +50,7 @@ export default function WhyUsSection() {
                     ${
                       f.color === "primary"
                         ? "text-[#0047BB] group-hover:text-white"
-                        : "text-[#E7B036] group-hover:text-white"
+                        : "text-[#FF8C00] group-hover:text-white"
                     }`}
                 >
                   {f.icon}
