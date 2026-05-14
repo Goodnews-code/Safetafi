@@ -21,6 +21,22 @@ SAFETAFI is a Next.js web application for a Nigerian transport and logistics com
   - Reactive statistics (Revenue, Volume, Avg. Size) that update based on selected filters.
   - CSV export for reporting.
 
+## Backend Architecture & API
+
+SAFETAFI utilizes a robust backend powered by Next.js Serverless API routes and Supabase:
+- **Webhook Handlers:** Dedicated `/api/paystack/webhook` and `/api/monnify/webhook` routes to capture asynchronous payment verifications securely from both gateways.
+- **Database Synchronization:** Secure, server-side data insertion ensures that all approved transactions are accurately recorded into Supabase in real-time, preventing data loss if a user drops connection.
+- **Dynamic Application State:** A dedicated `app_settings` database table enables global application configuration without requiring a redeployment.
+
+## Admin Controls & The Toggle System
+
+The application features a secure `/admin` dashboard that acts as the command center for the logistics network. 
+
+Using the **Trip Control** and **Pricing** panels, administrators can:
+- **Toggle Payments (On/Off):** Instantly pause or resume payment processing globally. When payments are disabled, the checkout portal seamlessly switches to a dynamic "We'll Be Right Back" state to prevent bookings.
+- **Schedule Upcoming Trips:** Set the exact target date for the next transport service. This dynamically updates the user-facing booking portal to reflect the precise upcoming schedule.
+- **Pricing Management:** Update base transport fares across all available routes and destinations dynamically.
+
 ## Technology Stack
 
 - **Framework:** Next.js 16 (App Router)
