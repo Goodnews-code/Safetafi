@@ -8,8 +8,10 @@ import AboutSection from "@/components/AboutSection";
 import ServicesSection from "@/components/ServicesSection";
 import TestimonialsSection from "@/components/TestimonialsSection";
 import ContactSection from "@/components/ContactSection";
+import dynamic from "next/dynamic";
 import Footer from "@/components/Footer";
-import PaymentModal from "@/components/PaymentModal";
+
+const PaymentModal = dynamic(() => import("@/components/PaymentModal"), { ssr: false });
 
 export default function LandingPageClient() {
   const [paymentOpen, setPaymentOpen] = useState(false);
