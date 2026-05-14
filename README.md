@@ -67,9 +67,25 @@ Make sure you have Node.js and npm (or yarn/pnpm) installed on your local machin
    ```
 
 4. Set up environment variables:
-   Create a `.env.local` file in the root directory and add your Paystack Public Key:
+   Create a `.env.local` file in the root directory with the following variables:
    ```env
+   # Database
+   NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+   SUPABASE_SERVICE_ROLE_KEY=your_supabase_service_role_key
+
+   # Paystack
    NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY=your_paystack_public_key
+   PAYSTACK_SECRET_KEY=your_paystack_secret_key
+
+   # Monnify
+   NEXT_PUBLIC_MONNIFY_API_KEY=your_monnify_api_key
+   MONNIFY_SECRET_KEY=your_monnify_secret_key
+   NEXT_PUBLIC_MONNIFY_CONTRACT_CODE=your_monnify_contract_code
+
+   # Configuration
+   NEXT_PUBLIC_PAYMENT_GATEWAY=paystack
+   DASHBOARD_PASSCODE=your_admin_passcode
+   NEXT_PUBLIC_BUSINESS_EMAIL=your_business_email
    ```
 
 5. Start the development server:
