@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { usePaystackPayment } from "react-paystack";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
@@ -229,6 +230,7 @@ function PaystackCheckout({
 // ─── Main Modal ───────────────────────────────────────────────────────────────
 
 export default function PaymentModal({ isOpen, onClose }: PaymentModalProps) {
+  const [mounted, setMounted] = useState(false);
   const [step, setStep] = useState<Step>("form");
   const [successRef, setSuccessRef] = useState("");
   const [details, setDetails] = useState<PaymentDetails>({
@@ -239,6 +241,21 @@ export default function PaymentModal({ isOpen, onClose }: PaymentModalProps) {
     amount: SERVICE_OPTIONS[0].amount,
     description: "",
   });
+
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [isOpen]);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const selectedService = SERVICE_OPTIONS.find((s) => s.label === details.service);
   const isCustom = selectedService?.id === "custom";
@@ -280,19 +297,20 @@ export default function PaymentModal({ isOpen, onClose }: PaymentModalProps) {
     }, 400);
   };
 
-  if (!isOpen) return null;
+  if (!isOpen || !mounted) return null;
 
-  return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
-      {/* Backdrop */}
-      <div
-        className="absolute inset-0 bg-black/60 backdrop-blur-sm"
-        onClick={handleClose}
-      />
-
-      {/* Modal */}
-      <div className="relative bg-white rounded-[2rem] shadow-2xl w-[90%] md:w-[70%] lg:w-[50%] max-w-none max-h-[90vh] overflow-y-auto z-10">
-        {/* Header */}
+  return createPortal(
+    <div 
+      className="fixed inset-0 z-[2147483647] overflow-y-auto bg-black/98 backdrop-blur-xl p-4 sm:p-6 md:p-20"
+      onClick={handleClose}
+    >
+      <div className="flex min-h-full items-center justify-center">
+        {/* Modal content container - stop propagation so clicking modal doesn't close it */}
+        <div 
+          className="relative bg-white rounded-[2rem] shadow-[0_0_100px_rgba(0,0,0,0.5)] w-[90%] md:w-[70%] lg:w-[50%] max-w-none z-20 animate-fade-in-up"
+          onClick={(e) => e.stopPropagation()}
+        >
+          {/* Header */}
         <div className="sticky top-0 bg-white/95 backdrop-blur-sm border-b border-slate-100 px-8 py-6 flex items-center justify-between rounded-t-[2rem]">
           <div>
             <h2 className="text-2xl font-black text-slate-900">
@@ -552,6 +570,7 @@ export default function PaymentModal({ isOpen, onClose }: PaymentModalProps) {
           )}
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
