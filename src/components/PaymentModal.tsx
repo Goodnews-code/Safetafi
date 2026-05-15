@@ -291,7 +291,7 @@ export default function PaymentModal({ isOpen, onClose }: PaymentModalProps) {
       />
 
       {/* Modal */}
-      <div className="relative bg-white rounded-[2rem] shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto z-10">
+      <div className="relative bg-white rounded-[2rem] shadow-2xl w-[90%] md:w-[70%] lg:w-[50%] max-w-none max-h-[90vh] overflow-y-auto z-10">
         {/* Header */}
         <div className="sticky top-0 bg-white/95 backdrop-blur-sm border-b border-slate-100 px-8 py-6 flex items-center justify-between rounded-t-[2rem]">
           <div>
