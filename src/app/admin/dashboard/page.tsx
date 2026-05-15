@@ -73,14 +73,7 @@ export default async function AdminDashboard() {
     getTripSettings()
   ]);
 
-  if (statsRes.error || recentRes.error) {
-    return (
-      <div className="flex h-screen items-center justify-center bg-red-50 text-red-600 font-bold p-8 text-center rounded-3xl">
-        Error loading transactions: {statsRes.error?.message || recentRes.error?.message}
-      </div>
-    );
-  }
-
+  const dbError = statsRes.error || recentRes.error;
   const allTxForStats = statsRes.data || [];
   const transactions = recentRes.data || [];
 
@@ -129,6 +122,19 @@ export default async function AdminDashboard() {
           </div>
           <AdminActions />
         </header>
+
+        {/* DB Warning Banner — shown when Supabase is unreachable */}
+        {dbError && (
+          <div className="mb-8 flex items-start gap-4 bg-amber-50 border border-amber-200 rounded-2xl px-6 py-4">
+            <span className="text-2xl">⚠️</span>
+            <div>
+              <p className="font-black text-amber-800 text-sm">Database Unreachable</p>
+              <p className="text-amber-700 text-xs mt-0.5">
+                Could not connect to Supabase. Check your <code className="bg-amber-100 px-1 rounded">NEXT_PUBLIC_SUPABASE_URL</code> and <code className="bg-amber-100 px-1 rounded">SUPABASE_SERVICE_ROLE_KEY</code> environment variables. Showing empty data.
+              </p>
+            </div>
+          </div>
+        )}
 
         {/* Unified Transaction Ledger — Handles stats, filtering, and table */}
         <TransactionLedger 
