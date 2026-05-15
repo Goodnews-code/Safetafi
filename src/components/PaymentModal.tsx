@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { usePaystackPayment } from "react-paystack";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
@@ -51,12 +52,6 @@ const SERVICE_OPTIONS = [
     label: "Supply Chain Sourcing",
     amount: 50000,
     icon: "inventory_2",
-  },
-  {
-    id: "custom",
-    label: "Custom / Quote-based",
-    amount: 0,
-    icon: "edit",
   },
 ];
 
@@ -199,12 +194,22 @@ function PaystackCheckout({
           </button>
           <button
             type="button"
-            onClick={() =>
+            onClick={() => {
+              // Fallback to dummy demo mode if Paystack is not configured
+              if (!publicKey || publicKey.includes("your_paystack_public_key")) {
+                setVerifying(true);
+                setTimeout(() => {
+                  setVerifying(false);
+                  onSuccess(`DEMO_REF_${Math.floor(Math.random() * 10000000)}`, { dummy: true });
+                }, 1500);
+                return;
+              }
+              
               initializePayment({
                 onSuccess: onPaystackSuccess,
                 onClose: () => {},
-              })
-            }
+              });
+            }}
             className="flex-[2] bg-[#0047BB] text-white py-4 rounded-2xl font-black hover:bg-[#001B44] transition-all shadow-xl shadow-blue-600/20 flex items-center justify-center gap-2"
           >
             <span className="material-symbols-outlined text-xl">lock</span>
@@ -219,6 +224,7 @@ function PaystackCheckout({
 // ─── Main Modal ───────────────────────────────────────────────────────────────
 
 export default function PaymentModal({ isOpen, onClose }: PaymentModalProps) {
+  const [mounted, setMounted] = useState(false);
   const [step, setStep] = useState<Step>("form");
   const [successRef, setSuccessRef] = useState("");
   const [details, setDetails] = useState<PaymentDetails>({
@@ -230,8 +236,13 @@ export default function PaymentModal({ isOpen, onClose }: PaymentModalProps) {
     description: "",
   });
 
+  // No body scroll lock — the portal overlay handles its own scroll
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   const selectedService = SERVICE_OPTIONS.find((s) => s.label === details.service);
-  const isCustom = selectedService?.id === "custom";
 
   const handleServiceChange = (label: string) => {
     const svc = SERVICE_OPTIONS.find((s) => s.label === label);
@@ -244,7 +255,7 @@ export default function PaymentModal({ isOpen, onClose }: PaymentModalProps) {
 
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!details.name || !details.email || (!details.amount && !isCustom)) return;
+    if (!details.name || !details.email || !details.amount) return;
     setStep("confirm");
   };
 
@@ -270,19 +281,47 @@ export default function PaymentModal({ isOpen, onClose }: PaymentModalProps) {
     }, 400);
   };
 
-  if (!isOpen) return null;
+  if (!isOpen || !mounted) return null;
 
-  return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
-      {/* Backdrop */}
+  return createPortal(
+    <>
+      {/* Layer 1: Fixed blur backdrop — clicks here close modal */}
       <div
-        className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+        style={{
+          position: "fixed", inset: 0,
+          zIndex: 2147483646,
+          backdropFilter: "blur(12px)",
+          WebkitBackdropFilter: "blur(12px)",
+          backgroundColor: "rgba(15, 23, 42, 0.35)",
+        }}
         onClick={handleClose}
       />
 
-      {/* Modal */}
-      <div className="relative bg-white rounded-[2rem] shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto z-10">
-        {/* Header */}
+      {/* Layer 2: Scrollable overlay (transparent) on top of blur */}
+      <div
+        style={{
+          position: "fixed", inset: 0,
+          zIndex: 2147483647,
+          overflowY: "auto",
+          display: "flex",
+          justifyContent: "center",
+          padding: "3rem 1rem",
+        }}
+        onClick={handleClose}
+      >
+        <div
+          style={{
+            position: "relative",
+            backgroundColor: "#fff",
+            borderRadius: "2rem",
+            width: "90%",
+            maxWidth: "680px",
+            alignSelf: "flex-start",
+            boxShadow: "0 25px 80px rgba(0,0,0,0.25)",
+          }}
+          onClick={(e) => e.stopPropagation()}
+        >
+          {/* Header */}
         <div className="sticky top-0 bg-white/95 backdrop-blur-sm border-b border-slate-100 px-8 py-6 flex items-center justify-between rounded-t-[2rem]">
           <div>
             <h2 className="text-2xl font-black text-slate-900">
@@ -408,25 +447,7 @@ export default function PaymentModal({ isOpen, onClose }: PaymentModalProps) {
                 </div>
               </div>
 
-              {/* Custom amount (only for custom service) */}
-              {isCustom && (
-                <div>
-                  <label className="block text-xs font-black text-slate-500 uppercase tracking-widest mb-2">
-                    Custom Amount (₦) *
-                  </label>
-                  <input
-                    type="number"
-                    required
-                    min={1000}
-                    value={details.amount || ""}
-                    onChange={(e) =>
-                      setDetails({ ...details, amount: Number(e.target.value) })
-                    }
-                    placeholder="e.g. 150000"
-                    className="w-full px-5 py-4 rounded-2xl border border-slate-200 bg-slate-50 focus:ring-4 focus:ring-blue-100 focus:border-[#0047BB] outline-none transition-all placeholder:text-slate-300 font-medium"
-                  />
-                </div>
-              )}
+
 
               {/* Description */}
               <div>
@@ -540,8 +561,10 @@ export default function PaymentModal({ isOpen, onClose }: PaymentModalProps) {
               </div>
             </div>
           )}
+          </div>
         </div>
       </div>
-    </div>
+    </>,
+    document.body
   );
 }
