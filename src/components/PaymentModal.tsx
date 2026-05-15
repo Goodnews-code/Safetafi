@@ -53,12 +53,6 @@ const SERVICE_OPTIONS = [
     amount: 50000,
     icon: "inventory_2",
   },
-  {
-    id: "custom",
-    label: "Custom / Quote-based",
-    amount: 0,
-    icon: "edit",
-  },
 ];
 
 // ─── Amount Display ───────────────────────────────────────────────────────────
@@ -242,23 +236,13 @@ export default function PaymentModal({ isOpen, onClose }: PaymentModalProps) {
     description: "",
   });
 
-  useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "unset";
-    }
-    return () => {
-      document.body.style.overflow = "unset";
-    };
-  }, [isOpen]);
+  // No body scroll lock — the portal overlay handles its own scroll
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
   const selectedService = SERVICE_OPTIONS.find((s) => s.label === details.service);
-  const isCustom = selectedService?.id === "custom";
 
   const handleServiceChange = (label: string) => {
     const svc = SERVICE_OPTIONS.find((s) => s.label === label);
@@ -271,7 +255,7 @@ export default function PaymentModal({ isOpen, onClose }: PaymentModalProps) {
 
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!details.name || !details.email || (!details.amount && !isCustom)) return;
+    if (!details.name || !details.email || !details.amount) return;
     setStep("confirm");
   };
 
@@ -300,14 +284,41 @@ export default function PaymentModal({ isOpen, onClose }: PaymentModalProps) {
   if (!isOpen || !mounted) return null;
 
   return createPortal(
-    <div 
-      className="fixed inset-0 z-[2147483647] overflow-y-auto bg-black/98 backdrop-blur-xl p-4 sm:p-6 md:p-20"
-      onClick={handleClose}
-    >
-      <div className="flex min-h-full items-center justify-center">
-        {/* Modal content container - stop propagation so clicking modal doesn't close it */}
-        <div 
-          className="relative bg-white rounded-[2rem] shadow-[0_0_100px_rgba(0,0,0,0.5)] w-[90%] md:w-[70%] lg:w-[50%] max-w-none z-20 animate-fade-in-up"
+    <>
+      {/* Layer 1: Fixed blur backdrop — clicks here close modal */}
+      <div
+        style={{
+          position: "fixed", inset: 0,
+          zIndex: 2147483646,
+          backdropFilter: "blur(12px)",
+          WebkitBackdropFilter: "blur(12px)",
+          backgroundColor: "rgba(15, 23, 42, 0.35)",
+        }}
+        onClick={handleClose}
+      />
+
+      {/* Layer 2: Scrollable overlay (transparent) on top of blur */}
+      <div
+        style={{
+          position: "fixed", inset: 0,
+          zIndex: 2147483647,
+          overflowY: "auto",
+          display: "flex",
+          justifyContent: "center",
+          padding: "3rem 1rem",
+        }}
+        onClick={handleClose}
+      >
+        <div
+          style={{
+            position: "relative",
+            backgroundColor: "#fff",
+            borderRadius: "2rem",
+            width: "90%",
+            maxWidth: "680px",
+            alignSelf: "flex-start",
+            boxShadow: "0 25px 80px rgba(0,0,0,0.25)",
+          }}
           onClick={(e) => e.stopPropagation()}
         >
           {/* Header */}
@@ -436,25 +447,7 @@ export default function PaymentModal({ isOpen, onClose }: PaymentModalProps) {
                 </div>
               </div>
 
-              {/* Custom amount (only for custom service) */}
-              {isCustom && (
-                <div>
-                  <label className="block text-xs font-black text-slate-500 uppercase tracking-widest mb-2">
-                    Custom Amount (₦) *
-                  </label>
-                  <input
-                    type="number"
-                    required
-                    min={1000}
-                    value={details.amount || ""}
-                    onChange={(e) =>
-                      setDetails({ ...details, amount: Number(e.target.value) })
-                    }
-                    placeholder="e.g. 150000"
-                    className="w-full px-5 py-4 rounded-2xl border border-slate-200 bg-slate-50 focus:ring-4 focus:ring-blue-100 focus:border-[#0047BB] outline-none transition-all placeholder:text-slate-300 font-medium"
-                  />
-                </div>
-              )}
+
 
               {/* Description */}
               <div>
@@ -568,9 +561,10 @@ export default function PaymentModal({ isOpen, onClose }: PaymentModalProps) {
               </div>
             </div>
           )}
+          </div>
         </div>
       </div>
-    </div>,
+    </>,
     document.body
   );
 }
