@@ -7,6 +7,21 @@
 
 ---
 
+## 🌐 Live Demo
+
+| | |
+|---|---|
+| **🔗 Site URL** | [https://safetafi.netlify.app/](https://safetafi.netlify.app/) |
+| **🔐 Admin Password** | `12345678` |
+
+### 🗺️ How to Access the Admin Dashboard
+1. Visit the live site and **scroll to the very bottom** of the page (the Footer section).
+2. Look for the small **🔑 "Admin"** link in the footer — click it.
+3. You'll be taken to the admin login page at `/admin`.
+4. Enter the password `12345678` to access the **Transaction Ledger & Dashboard**.
+
+---
+
 ## 📖 Overview
 
 **SAFETAFI** is a premium Next.js web application engineered for a modern Nigerian transport and logistics company. It bridges the gap between businesses and markets with end-to-end transport solutions, featuring a sleek, responsive user interface and integrated secure payment flows.
