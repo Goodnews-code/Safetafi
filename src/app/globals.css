@@ -130,6 +130,17 @@ body {
   font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
 }
 
+/* Global keyframe declarations (required outside @theme in Tailwind v4) */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
+}
+
+@keyframes fadeInUp {
+  0% { opacity: 0; transform: translateY(24px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
 /* Scroll-triggered fade animations */
 .animate-fade-in-up {
   animation: fadeInUp 0.8s ease-out forwards;
