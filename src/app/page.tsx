@@ -14,8 +14,8 @@ export default function Home() {
       
       {/* Background Decor Layer - Clipped */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-[-10%] right-[-10%] w-[50%] h-[50%] bg-[#100287] opacity-[0.05] rounded-full blur-[120px]" />
-        <div className="absolute bottom-[-10%] left-[-10%] w-[40%] h-[40%] bg-[#E7B036] opacity-[0.05] rounded-full blur-[100px]" />
+        <div className="absolute top-[-10%] right-[-10%] w-[50%] h-[50%] bg-[#100287] opacity-[0.05] rounded-full blur-[120px] animate-float" />
+        <div className="absolute bottom-[-10%] left-[-10%] w-[40%] h-[40%] bg-[#E7B036] opacity-[0.05] rounded-full blur-[100px] animate-float" style={{ animationDelay: "1.5s" }} />
         <div className="absolute inset-0 opacity-[0.03] pattern-grid-lg" />
       </div>
 
