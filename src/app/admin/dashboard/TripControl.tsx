@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 export default function TripControl() {
   const [tripDate, setTripDate] = useState("");
   const [paymentsEnabled, setPaymentsEnabled] = useState(false);
+  const [paymentGateway, setPaymentGateway] = useState<"paystack" | "monnify">("paystack");
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [toast, setToast] = useState<{ type: "success" | "error"; msg: string } | null>(null);
@@ -16,6 +17,7 @@ export default function TripControl() {
       .then((data) => {
         setTripDate(data.trip_date ?? "");
         setPaymentsEnabled(data.payments_enabled ?? false);
+        setPaymentGateway(data.payment_gateway ?? "paystack");
       })
       .catch(() => showToast("error", "Could not load current settings."))
       .finally(() => setLoading(false));
@@ -36,7 +38,11 @@ export default function TripControl() {
       const res = await fetch("/api/admin/settings", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ trip_date: tripDate, payments_enabled: paymentsEnabled }),
+        body: JSON.stringify({ 
+          trip_date: tripDate, 
+          payments_enabled: paymentsEnabled,
+          payment_gateway: paymentGateway 
+        }),
       });
       const data = await res.json();
       if (data.status) {
@@ -73,6 +79,25 @@ export default function TripControl() {
     }
   }
 
+  async function handleGatewayChange(val: "paystack" | "monnify") {
+    setPaymentGateway(val);
+    try {
+      const res = await fetch("/api/admin/settings", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ payment_gateway: val }),
+      });
+      const data = await res.json();
+      if (data.status) {
+        showToast("success", `Gateway switched to ${val.toUpperCase()}.`);
+      } else {
+        showToast("error", data.error || "Gateway switch failed.");
+      }
+    } catch {
+      showToast("error", "Network error during gateway switch.");
+    }
+  }
+
   return (
     <div className="bg-white rounded-[2rem] border border-slate-100 shadow-sm p-6 md:p-8 mb-8 relative overflow-hidden">
       {/* Background decoration */}
@@ -83,7 +108,7 @@ export default function TripControl() {
       {/* Toast */}
       {toast && (
         <div
-          className={`absolute top-4 right-4 px-5 py-3 rounded-2xl text-xs font-black tracking-wide shadow-lg z-10 transition-all animate-in fade-in slide-in-from-top-2 duration-300 ${
+          className={`absolute top-4 right-4 px-5 py-3 rounded-2xl text-xs font-black tracking-wide shadow-lg z-50 transition-all animate-in fade-in slide-in-from-top-2 duration-300 ${
             toast.type === "success"
               ? "bg-green-500 text-white"
               : "bg-red-500 text-white"
@@ -127,6 +152,32 @@ export default function TripControl() {
             />
             <p className="text-[10px] text-slate-400 font-medium ml-1">
               This date appears in the booking form &amp; paused notice.
+            </p>
+          </div>
+
+          {/* ── Payment Provider Selection ── */}
+          <div className="space-y-2">
+            <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest">
+              Payment Provider
+            </label>
+            <div className="flex p-1.5 bg-slate-50 border border-slate-200 rounded-2xl gap-1">
+               <button 
+                 onClick={() => handleGatewayChange("paystack")}
+                 className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-xl font-black text-xs transition-all ${paymentGateway === 'paystack' ? 'bg-white shadow-sm text-[#100287]' : 'text-slate-400 hover:text-slate-600'}`}
+               >
+                 <span className="material-symbols-outlined text-sm">bolt</span>
+                 Paystack
+               </button>
+               <button 
+                 onClick={() => handleGatewayChange("monnify")}
+                 className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-xl font-black text-xs transition-all ${paymentGateway === 'monnify' ? 'bg-white shadow-sm text-[#100287]' : 'text-slate-400 hover:text-slate-600'}`}
+               >
+                 <span className="material-symbols-outlined text-sm">account_balance_wallet</span>
+                 Monnify
+               </button>
+            </div>
+            <p className="text-[10px] text-slate-400 font-medium ml-1">
+              Active gateway for all customer transactions.
             </p>
           </div>
 
