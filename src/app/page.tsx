@@ -13,8 +13,8 @@ export default function Home() {
     <div className="min-h-screen bg-[#F4F7FA] relative overflow-hidden flex flex-col font-sans">
       
       {/* Dynamic Glass Background Shapes - ANIMATED GLOBS */}
-      <div className="absolute top-[-10%] right-[-10%] w-[50%] h-[50%] bg-[#100287] opacity-[0.08] rounded-full blur-[120px] animate-pulse pointer-events-none" />
-      <div className="absolute bottom-[-10%] left-[-10%] w-[40%] h-[40%] bg-[#E7B036] opacity-[0.08] rounded-full blur-[100px] animate-pulse duration-[5s] pointer-events-none" />
+      <div className="absolute top-[-10%] right-[-10%] w-[60%] h-[60%] bg-[#100287] opacity-[0.12] rounded-full blur-[140px] animate-pulse pointer-events-none" />
+      <div className="absolute bottom-[-10%] left-[-10%] w-[50%] h-[50%] bg-[#E7B036] opacity-[0.12] rounded-full blur-[120px] animate-pulse duration-[5s] pointer-events-none" />
 
       {/* Grid Pattern Layer */}
       <div className="absolute inset-0 opacity-[0.03] pattern-grid-lg pointer-events-none" />
@@ -22,23 +22,23 @@ export default function Home() {
       {/* Main Content Area */}
       <main className="flex-1 flex flex-col items-center justify-start p-6 relative z-10 py-12 lg:py-20 gap-8">
 
-        {/* Trifecta Brand Watermarks - Increased visibility slightly */}
+        {/* Trifecta Brand Watermarks */}
         {/* TOP CENTER */}
-        <div className="hidden md:block absolute top-12 left-1/2 -translate-x-1/2 opacity-[0.03] pointer-events-none select-none z-0 whitespace-nowrap leading-none transition-opacity duration-1000">
+        <div className="hidden md:block absolute top-12 left-1/2 -translate-x-1/2 opacity-[0.05] pointer-events-none select-none z-0 whitespace-nowrap leading-none transition-opacity duration-1000">
           <h2 className="text-[14rem] font-black tracking-tighter text-slate-900 leading-none uppercase italic">
             SAFETAFI
           </h2>
         </div>
 
         {/* LEFT EDGE */}
-        <div className="hidden md:block absolute -left-24 top-1/2 -translate-y-1/2 opacity-[0.03] pointer-events-none select-none z-0 transform -rotate-90 origin-center whitespace-nowrap leading-none transition-opacity duration-1000">
+        <div className="hidden md:block absolute -left-24 top-1/2 -translate-y-1/2 opacity-[0.05] pointer-events-none select-none z-0 transform -rotate-90 origin-center whitespace-nowrap leading-none transition-opacity duration-1000">
           <h2 className="text-[12rem] font-black tracking-tighter text-slate-900 leading-none uppercase italic">
             SAFETAFI
           </h2>
         </div>
 
         {/* RIGHT EDGE */}
-        <div className="hidden md:block absolute -right-24 top-1/2 -translate-y-1/2 opacity-[0.03] pointer-events-none select-none z-0 transform rotate-90 origin-center whitespace-nowrap leading-none transition-opacity duration-1000">
+        <div className="hidden md:block absolute -right-24 top-1/2 -translate-y-1/2 opacity-[0.05] pointer-events-none select-none z-0 transform rotate-90 origin-center whitespace-nowrap leading-none transition-opacity duration-1000">
           <h2 className="text-[12rem] font-black tracking-tighter text-slate-900 leading-none uppercase italic">
             SAFETAFI
           </h2>

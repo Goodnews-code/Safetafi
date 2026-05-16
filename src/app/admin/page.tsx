@@ -47,11 +47,22 @@ export default async function AdminLogin(props: { searchParams?: Promise<{ error
       {/* Background Decor Layer */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         {/* ANIMATED GLOBS */}
-        <div className="absolute top-[-10%] right-[-10%] w-[50%] h-[50%] bg-[#100287] opacity-[0.06] rounded-full blur-[120px] animate-pulse" />
-        <div className="absolute bottom-[-10%] left-[-10%] w-[40%] h-[40%] bg-[#E7B036] opacity-[0.06] rounded-full blur-[100px] animate-pulse duration-[5s]" />
+        <div className="absolute top-[-10%] right-[-10%] w-[60%] h-[60%] bg-[#100287] opacity-[0.12] rounded-full blur-[140px] animate-pulse" />
+        <div className="absolute bottom-[-10%] left-[-10%] w-[50%] h-[50%] bg-[#E7B036] opacity-[0.12] rounded-full blur-[120px] animate-pulse duration-[5s]" />
         
         {/* Grid Pattern */}
-        <div className="absolute inset-0 bg-[#100287] opacity-[0.03] pattern-grid-lg" />
+        <div className="absolute inset-0 opacity-[0.03] pattern-grid-lg" />
+
+        {/* Trifecta Brand Watermarks */}
+        <div className="hidden md:block absolute top-12 left-1/2 -translate-x-1/2 opacity-[0.05] z-0 whitespace-nowrap leading-none transition-opacity duration-1000">
+          <h2 className="text-[10rem] font-black tracking-tighter text-slate-900 leading-none uppercase italic">SAFETAFI</h2>
+        </div>
+        <div className="hidden md:block absolute -left-24 top-1/2 -translate-y-1/2 opacity-[0.05] z-0 transform -rotate-90 origin-center whitespace-nowrap leading-none transition-opacity duration-1000">
+          <h2 className="text-[8rem] font-black tracking-tighter text-slate-900 leading-none uppercase italic">SAFETAFI</h2>
+        </div>
+        <div className="hidden md:block absolute -right-24 top-1/2 -translate-y-1/2 opacity-[0.05] z-0 transform rotate-90 origin-center whitespace-nowrap leading-none transition-opacity duration-1000">
+          <h2 className="text-[8rem] font-black tracking-tighter text-slate-900 leading-none uppercase italic">SAFETAFI</h2>
+        </div>
       </div>
       
       <div className="w-full max-w-md relative z-10">

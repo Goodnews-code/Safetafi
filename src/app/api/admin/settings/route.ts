@@ -18,7 +18,7 @@ export async function GET() {
   const { data, error } = await supabase
     .from("app_settings")
     .select("key, value")
-    .in("key", ["trip_date", "payments_enabled", "service_pricing"]);
+    .in("key", ["trip_date", "payments_enabled", "service_pricing", "payment_gateway"]);
 
   if (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });
@@ -41,6 +41,7 @@ export async function GET() {
   return NextResponse.json({
     trip_date: settings.trip_date ?? "Tuesday, 7th of April, 2026",
     payments_enabled: settings.payments_enabled === "true",
+    payment_gateway: settings.payment_gateway ?? "paystack",
     service_pricing: settings.service_pricing ? JSON.parse(settings.service_pricing) : defaultPricing,
   });
 }
@@ -52,7 +53,7 @@ export async function POST(req: NextRequest) {
   }
 
   const body = await req.json();
-  const { trip_date, payments_enabled, service_pricing } = body;
+  const { trip_date, payments_enabled, service_pricing, payment_gateway } = body;
   const supabase = getSupabase();
 
   const upserts = [];
@@ -65,6 +66,9 @@ export async function POST(req: NextRequest) {
   }
   if (service_pricing !== undefined) {
     upserts.push({ key: "service_pricing", value: JSON.stringify(service_pricing) });
+  }
+  if (payment_gateway !== undefined) {
+    upserts.push({ key: "payment_gateway", value: String(payment_gateway) });
   }
 
   if (upserts.length === 0) {
