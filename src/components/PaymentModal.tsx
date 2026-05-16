@@ -3,6 +3,7 @@
 import { useState, useCallback, useEffect } from "react";
 import { createPortal } from "react-dom";
 import { usePaystackPayment } from "react-paystack";
+import { HERO_IMAGE } from "@/lib/constants";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -285,17 +286,41 @@ export default function PaymentModal({ isOpen, onClose }: PaymentModalProps) {
 
   return createPortal(
     <>
-      {/* Layer 1: Fixed blur backdrop — clicks here close modal */}
+      {/* Layer 1: Animated wallpaper + blur backdrop — clicks here close modal */}
       <div
         style={{
           position: "fixed", inset: 0,
           zIndex: 2147483646,
-          backdropFilter: "blur(12px)",
-          WebkitBackdropFilter: "blur(12px)",
-          backgroundColor: "rgba(15, 23, 42, 0.35)",
+          overflow: "hidden",
         }}
         onClick={handleClose}
-      />
+      >
+        {/* Floating hero image wallpaper */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={HERO_IMAGE}
+          alt=""
+          aria-hidden="true"
+          style={{
+            position: "absolute", inset: 0,
+            width: "100%", height: "100%",
+            objectFit: "cover",
+            opacity: 0.35,
+            animation: "float 3s ease-in-out infinite",
+          }}
+        />
+        {/* Dark gradient overlay */}
+        <div style={{
+          position: "absolute", inset: 0,
+          background: "linear-gradient(135deg, rgba(11,14,20,0.88) 0%, rgba(16,2,135,0.50) 100%)",
+        }} />
+        {/* Frosted blur layer */}
+        <div style={{
+          position: "absolute", inset: 0,
+          backdropFilter: "blur(6px)",
+          WebkitBackdropFilter: "blur(6px)",
+        }} />
+      </div>
 
       {/* Layer 2: Scrollable overlay (transparent) on top of blur */}
       <div
