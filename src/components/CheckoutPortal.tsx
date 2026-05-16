@@ -46,6 +46,7 @@ export default function CheckoutPortal() {
   const [successRef, setSuccessRef] = useState("");
   const [settingsLoading, setSettingsLoading] = useState(true);
   const [paymentsEnabled, setPaymentsEnabled] = useState(false);
+  const [selectedGateway, setSelectedGateway] = useState<"paystack" | "monnify" | "both">("paystack");
   const [serviceOptions, setServiceOptions] = useState<ServiceOption[]>(DEFAULT_SERVICE_OPTIONS);
 
   const [details, setDetails] = useState({
