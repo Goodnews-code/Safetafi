@@ -10,42 +10,42 @@ export const metadata: Metadata = {
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-[#F4F7FA] relative overflow-x-hidden flex flex-col font-sans">
+    <div className="min-h-screen bg-[#F4F7FA] relative overflow-hidden flex flex-col font-sans">
       
-      {/* Background Decor Layer - Clipped */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-[-10%] right-[-10%] w-[50%] h-[50%] bg-[#100287] opacity-[0.05] rounded-full blur-[120px] animate-float" />
-        <div className="absolute bottom-[-10%] left-[-10%] w-[40%] h-[40%] bg-[#E7B036] opacity-[0.05] rounded-full blur-[100px] animate-float" style={{ animationDelay: "1.5s" }} />
-        <div className="absolute inset-0 opacity-[0.03] pattern-grid-lg" />
-      </div>
+      {/* Dynamic Glass Background Shapes - ANIMATED GLOBS */}
+      <div className="absolute top-[-10%] right-[-10%] w-[50%] h-[50%] bg-[#100287] opacity-[0.08] rounded-full blur-[120px] animate-pulse pointer-events-none" />
+      <div className="absolute bottom-[-10%] left-[-10%] w-[40%] h-[40%] bg-[#E7B036] opacity-[0.08] rounded-full blur-[100px] animate-pulse duration-[5s] pointer-events-none" />
+
+      {/* Grid Pattern Layer */}
+      <div className="absolute inset-0 opacity-[0.03] pattern-grid-lg pointer-events-none" />
 
       {/* Main Content Area */}
       <main className="flex-1 flex flex-col items-center justify-start p-6 relative z-10 py-12 lg:py-20 gap-8">
 
-        {/* Trifecta Brand Watermarks */}
+        {/* Trifecta Brand Watermarks - Increased visibility slightly */}
         {/* TOP CENTER */}
-        <div className="hidden md:block absolute top-12 left-1/2 -translate-x-1/2 opacity-[0.025] pointer-events-none select-none z-0 whitespace-nowrap leading-none">
+        <div className="hidden md:block absolute top-12 left-1/2 -translate-x-1/2 opacity-[0.03] pointer-events-none select-none z-0 whitespace-nowrap leading-none transition-opacity duration-1000">
           <h2 className="text-[14rem] font-black tracking-tighter text-slate-900 leading-none uppercase italic">
             SAFETAFI
           </h2>
         </div>
 
         {/* LEFT EDGE */}
-        <div className="hidden md:block absolute -left-24 top-1/2 -translate-y-1/2 opacity-[0.025] pointer-events-none select-none z-0 transform -rotate-90 origin-center whitespace-nowrap leading-none">
+        <div className="hidden md:block absolute -left-24 top-1/2 -translate-y-1/2 opacity-[0.03] pointer-events-none select-none z-0 transform -rotate-90 origin-center whitespace-nowrap leading-none transition-opacity duration-1000">
           <h2 className="text-[12rem] font-black tracking-tighter text-slate-900 leading-none uppercase italic">
             SAFETAFI
           </h2>
         </div>
 
         {/* RIGHT EDGE */}
-        <div className="hidden md:block absolute -right-24 top-1/2 -translate-y-1/2 opacity-[0.025] pointer-events-none select-none z-0 transform rotate-90 origin-center whitespace-nowrap leading-none">
+        <div className="hidden md:block absolute -right-24 top-1/2 -translate-y-1/2 opacity-[0.03] pointer-events-none select-none z-0 transform rotate-90 origin-center whitespace-nowrap leading-none transition-opacity duration-1000">
           <h2 className="text-[12rem] font-black tracking-tighter text-slate-900 leading-none uppercase italic">
             SAFETAFI
           </h2>
         </div>
 
         {/* Branding */}
-        <div className="text-center mb-8 animate-in fade-in duration-300">
+        <div className="text-center mb-8 animate-in fade-in slide-in-from-top-10 duration-1000">
            <div className="flex items-center justify-center mb-6">
               <div className="relative group p-6 transition-all duration-700 hover:scale-110 active:scale-95">
                  <img 

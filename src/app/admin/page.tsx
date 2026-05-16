@@ -42,8 +42,17 @@ export default async function AdminLogin(props: { searchParams?: Promise<{ error
     null;
 
   return (
-    <div className="min-h-screen bg-[#F4F7FA] flex items-center justify-center p-6 font-sans">
-      <div className="absolute inset-0 bg-[#100287] opacity-[0.03] pattern-grid-lg" />
+    <div className="min-h-screen bg-[#F4F7FA] relative overflow-hidden flex items-center justify-center p-6 font-sans">
+      
+      {/* Background Decor Layer */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        {/* ANIMATED GLOBS */}
+        <div className="absolute top-[-10%] right-[-10%] w-[50%] h-[50%] bg-[#100287] opacity-[0.06] rounded-full blur-[120px] animate-pulse" />
+        <div className="absolute bottom-[-10%] left-[-10%] w-[40%] h-[40%] bg-[#E7B036] opacity-[0.06] rounded-full blur-[100px] animate-pulse duration-[5s]" />
+        
+        {/* Grid Pattern */}
+        <div className="absolute inset-0 bg-[#100287] opacity-[0.03] pattern-grid-lg" />
+      </div>
       
       <div className="w-full max-w-md relative z-10">
         {/* Logo/Brand Header */}
