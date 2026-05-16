@@ -1,6 +1,5 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { HERO_IMAGE } from "@/lib/constants";
 
 export default async function AdminLogin(props: { searchParams?: Promise<{ error?: string }> }) {
   const searchParams = await props.searchParams;
@@ -43,32 +42,34 @@ export default async function AdminLogin(props: { searchParams?: Promise<{ error
     null;
 
   return (
-    <div className="relative min-h-screen flex items-center justify-center p-6 font-sans overflow-hidden bg-[#0B0E14]">
+    <div className="min-h-screen bg-[#F4F7FA] relative overflow-hidden flex items-center justify-center p-6 font-sans">
+      
+      {/* Background Decor Layer */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        {/* ANIMATED GLOBS */}
+        <div className="absolute top-[-10%] right-[-10%] w-[60%] h-[60%] bg-[#100287] opacity-[0.12] rounded-full blur-[140px] animate-pulse" />
+        <div className="absolute bottom-[-10%] left-[-10%] w-[50%] h-[50%] bg-[#E7B036] opacity-[0.12] rounded-full blur-[120px] animate-pulse duration-[5s]" />
+        
+        {/* Grid Pattern */}
+        <div className="absolute inset-0 opacity-[0.03] pattern-grid-lg" />
 
-      {/* ── Animated Wallpaper Background ── */}
-      <div className="absolute inset-0 z-0">
-        {/* Dark navy gradient overlay */}
-        <div className="absolute inset-0 z-10" style={{ background: "linear-gradient(135deg, rgba(11,14,20,0.93) 0%, rgba(16,2,135,0.55) 100%)" }} />
-        {/* Floating hero image */}
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src={HERO_IMAGE}
-          alt=""
-          aria-hidden="true"
-          className="w-full h-full object-cover animate-float opacity-40"
-        />
+        {/* Trifecta Brand Watermarks */}
+        <div className="hidden md:block absolute top-12 left-1/2 -translate-x-1/2 opacity-[0.05] z-0 whitespace-nowrap leading-none transition-opacity duration-1000">
+          <h2 className="text-[10rem] font-black tracking-tighter text-slate-900 leading-none uppercase italic">SAFETAFI</h2>
+        </div>
+        <div className="hidden md:block absolute -left-24 top-1/2 -translate-y-1/2 opacity-[0.05] z-0 transform -rotate-90 origin-center whitespace-nowrap leading-none transition-opacity duration-1000">
+          <h2 className="text-[8rem] font-black tracking-tighter text-slate-900 leading-none uppercase italic">SAFETAFI</h2>
+        </div>
+        <div className="hidden md:block absolute -right-24 top-1/2 -translate-y-1/2 opacity-[0.05] z-0 transform rotate-90 origin-center whitespace-nowrap leading-none transition-opacity duration-1000">
+          <h2 className="text-[8rem] font-black tracking-tighter text-slate-900 leading-none uppercase italic">SAFETAFI</h2>
+        </div>
       </div>
-
-      {/* Subtle animated orbs for depth */}
-      <div className="absolute top-1/4 -left-20 w-72 h-72 bg-[#100287] rounded-full opacity-20 blur-3xl animate-float" style={{ animationDelay: "1s" }} />
-      <div className="absolute bottom-1/4 -right-20 w-96 h-96 bg-[#E7B036] rounded-full opacity-10 blur-3xl animate-float" style={{ animationDelay: "2s" }} />
-
       
       <div className="w-full max-w-md relative z-10">
         {/* Logo/Brand Header */}
         <div className="flex flex-col items-center mb-10 group cursor-default">
            <img src="/logo.svg" alt="Safetafi" className="h-10 w-auto mb-4" />
-           <p className="text-[10px] font-bold text-white/70 uppercase tracking-[0.2em] mt-2 bg-white/10 backdrop-blur-sm px-3 py-1 rounded-full border border-white/20">
+           <p className="text-[10px] font-bold text-[#100287] uppercase tracking-[0.2em] mt-2 bg-indigo-50 px-3 py-1 rounded-full border border-indigo-100">
              Secure Operations Gateway
            </p>
         </div>
@@ -127,8 +128,8 @@ export default async function AdminLogin(props: { searchParams?: Promise<{ error
         </div>
 
         {/* Back Link */}
-        <div className="mt-8 text-center text-white/50 text-sm">
-           <a href="/" className="font-bold hover:text-white transition-all flex items-center justify-center gap-2 group">
+        <div className="mt-8 text-center text-slate-400 text-sm">
+           <a href="/" className="font-bold hover:text-[#100287] transition-all flex items-center justify-center gap-2 group">
               <span className="material-symbols-outlined text-lg group-hover:-translate-x-1 transition-transform">west</span>
               Return to Public Portal
            </a>

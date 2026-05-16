@@ -46,6 +46,7 @@ export default function CheckoutPortal() {
   const [successRef, setSuccessRef] = useState("");
   const [settingsLoading, setSettingsLoading] = useState(true);
   const [paymentsEnabled, setPaymentsEnabled] = useState(false);
+  const [selectedGateway, setSelectedGateway] = useState<"paystack" | "monnify" | "both">("paystack");
   const [serviceOptions, setServiceOptions] = useState<ServiceOption[]>(DEFAULT_SERVICE_OPTIONS);
 
   const [details, setDetails] = useState({
@@ -72,6 +73,7 @@ export default function CheckoutPortal() {
           amount: prev.amount || (data.service_pricing?.[0]?.amount ?? prev.amount)
         }));
         setPaymentsEnabled(data.payments_enabled ?? false);
+        setSelectedGateway(data.payment_gateway || "paystack");
         if (data.service_pricing) {
           setServiceOptions(data.service_pricing);
         }
@@ -188,7 +190,6 @@ export default function CheckoutPortal() {
     });
   };
 
-  const selectedGateway = process.env.NEXT_PUBLIC_PAYMENT_GATEWAY || "paystack";
 
   const handlePay = () => {
     if (selectedGateway === "monnify") {
