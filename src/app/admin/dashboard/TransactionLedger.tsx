@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useMemo } from "react";
 import TransactionTable from "./TransactionTable";
 
 interface Transaction {
@@ -37,45 +37,19 @@ interface TransactionLedgerProps {
 export default function TransactionLedger({
   allTransactions,
   recentTransactions,
-  currentTripDate,
 }: TransactionLedgerProps) {
-  const [selectedDate, setSelectedDate] = useState("All");
-
-  // 1. Extract unique dates for filter buttons
-  const uniqueDates = useMemo(() => {
-    const dates = new Set<string>();
-    allTransactions.forEach((t) => {
-      if (t.date) dates.add(t.date);
-    });
-    // Add current trip date if not present
-    if (currentTripDate) dates.add(currentTripDate);
-    
-    return Array.from(dates).sort((a, b) => b.localeCompare(a));
-  }, [allTransactions, currentTripDate]);
-
-  // 2. Filter data based on selected date
-  const filteredForStats = useMemo(() => {
-    if (selectedDate === "All") return allTransactions;
-    return allTransactions.filter((t) => t.date === selectedDate);
-  }, [allTransactions, selectedDate]);
-
-  const filteredForTable = useMemo(() => {
-    if (selectedDate === "All") return recentTransactions;
-    return recentTransactions.filter((t) => t.date === selectedDate);
-  }, [recentTransactions, selectedDate]);
-
-  // 3. Calculate Stats
+  // Calculate Global Stats
   const stats = useMemo(() => {
-    const successfulOnes = filteredForStats.filter(
+    const successfulOnes = allTransactions.filter(
       (t) => t.status === "success" || t.status === "test_success"
     );
     const totalRevenue = successfulOnes.reduce((acc, t) => acc + (t.amount || 0), 0);
     const successCount = successfulOnes.length;
-    const totalCheckouts = filteredForStats.length;
+    const totalCheckouts = allTransactions.length;
     const avgOrderValue = successCount > 0 ? totalRevenue / successCount : 0;
 
     return { totalRevenue, successCount, totalCheckouts, avgOrderValue };
-  }, [filteredForStats]);
+  }, [allTransactions]);
 
   const formatNaira = (amt: number) =>
     new Intl.NumberFormat("en-NG", {
@@ -86,33 +60,6 @@ export default function TransactionLedger({
 
   return (
     <div className="space-y-8">
-      {/* Date Filter Bar */}
-      <div className="flex flex-wrap items-center gap-3 mb-8">
-        <button
-          onClick={() => setSelectedDate("All")}
-          className={`px-5 py-2.5 rounded-xl font-black text-[10px] uppercase tracking-widest transition-all border-2 ${
-            selectedDate === "All"
-              ? "bg-[#100287] border-[#100287] text-white shadow-lg shadow-blue-600/20"
-              : "bg-white border-slate-100 text-slate-400 hover:border-slate-200"
-          }`}
-        >
-          All Transactions
-        </button>
-        {uniqueDates.map((date) => (
-          <button
-            key={date}
-            onClick={() => setSelectedDate(date)}
-            className={`px-5 py-2.5 rounded-xl font-black text-[10px] uppercase tracking-widest transition-all border-2 ${
-              selectedDate === date
-                ? "bg-[#100287] border-[#100287] text-white shadow-lg shadow-blue-600/20"
-                : "bg-white border-slate-100 text-slate-400 hover:border-slate-200"
-            }`}
-          >
-            {date === currentTripDate ? `📌 ${date}` : date}
-          </button>
-        ))}
-      </div>
-
       {/* Statistics Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
         {/* Revenue Card */}
@@ -121,7 +68,7 @@ export default function TransactionLedger({
             <span className="material-symbols-outlined text-9xl text-[#0047BB]">payments</span>
           </div>
           <p className="text-[10px] md:text-xs font-black text-slate-400 uppercase tracking-widest mb-2">
-            Revenue {selectedDate !== 'All' ? `(${selectedDate})` : '(All Time)'}
+            Revenue (All Time)
           </p>
           <div className="flex items-baseline gap-2">
             <h3 className="text-2xl md:text-3xl font-black text-[#0047BB]">
@@ -139,7 +86,7 @@ export default function TransactionLedger({
             <span className="material-symbols-outlined text-9xl text-orange-600">bar_chart</span>
           </div>
           <p className="text-[10px] md:text-xs font-black text-slate-400 uppercase tracking-widest mb-2">
-            Checkouts {selectedDate !== 'All' ? `(${selectedDate})` : '(Total)'}
+            Checkouts (Total)
           </p>
           <div className="flex items-baseline gap-2">
             <h3 className="text-2xl md:text-3xl font-black text-slate-900">
@@ -157,7 +104,7 @@ export default function TransactionLedger({
             <span className="material-symbols-outlined text-9xl text-white">analytics</span>
           </div>
           <p className="text-[10px] md:text-xs font-black text-slate-500 uppercase tracking-widest mb-2">
-            Avg. Size {selectedDate !== 'All' ? `(${selectedDate})` : '(Overall)'}
+            Avg. Size (Overall)
           </p>
           <div className="flex items-baseline gap-2">
             <h3 className="text-2xl md:text-3xl font-black text-white">
@@ -171,7 +118,7 @@ export default function TransactionLedger({
       </div>
 
       {/* Transaction Table */}
-      <TransactionTable transactions={filteredForTable} title={selectedDate === 'All' ? 'All Orders' : `Orders for ${selectedDate}`} />
+      <TransactionTable transactions={recentTransactions} title="All Orders" />
     </div>
   );
 }
