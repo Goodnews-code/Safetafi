@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 
 interface Transaction {
   id: string;
@@ -22,6 +22,7 @@ interface Transaction {
 interface TransactionTableProps {
   transactions: Transaction[];
   title?: string;
+  onFilteredTransactionsChange?: (transactions: Transaction[], isAllTime: boolean) => void;
 }
 
 function formatNaira(amt: number) {
@@ -61,7 +62,7 @@ function getMonthYearAndDay(tr: Transaction) {
   return { monthYear, day, rawDate: isNaN(d.getTime()) ? 0 : d.getTime() };
 }
 
-export default function TransactionTable({ transactions, title = "All Orders" }: TransactionTableProps) {
+export default function TransactionTable({ transactions, title = "All Orders", onFilteredTransactionsChange }: TransactionTableProps) {
   const [searchTerm, setSearchTerm] = useState("");
   const [activeMonth, setActiveMonth] = useState<string | null>(null);
   const [activeDay, setActiveDay] = useState("All Days");
@@ -134,6 +135,20 @@ export default function TransactionTable({ transactions, title = "All Orders" }:
     setActiveMonth(m);
     setActiveDay("All Days");
   };
+
+  const visibleTransactions = useMemo(() => {
+    if (currentActiveMonth === "All") return filtered;
+    if (!groupedData[currentActiveMonth]) return [];
+    if (activeDay === "All Days") return Object.values(groupedData[currentActiveMonth]).flat();
+    return groupedData[currentActiveMonth][activeDay] || [];
+  }, [currentActiveMonth, activeDay, filtered, groupedData]);
+
+  useEffect(() => {
+    if (onFilteredTransactionsChange) {
+      const isAllTime = currentActiveMonth === "All" && activeDay === "All Days";
+      onFilteredTransactionsChange(visibleTransactions, isAllTime);
+    }
+  }, [visibleTransactions, currentActiveMonth, activeDay, onFilteredTransactionsChange]);
 
   const renderRow = (tr: Transaction) => (
     <tr key={tr.id} className="hover:bg-slate-50 transition-colors group">
