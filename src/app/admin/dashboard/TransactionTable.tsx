@@ -235,13 +235,13 @@ export default function TransactionTable({ transactions, title = "All Orders" }:
 
       {/* Primary Tabs for Months */}
       {sortedMonths.length > 0 && (
-        <div className="px-8 py-4 border-b border-slate-100 flex gap-2 overflow-x-auto no-scrollbar bg-slate-50/50">
+        <div className="px-8 py-5 border-b border-slate-100 flex gap-3 overflow-x-auto no-scrollbar bg-slate-50/30">
           <button
             onClick={() => handleMonthChange("All")}
-            className={`whitespace-nowrap px-4 py-2 rounded-full text-[11px] font-black uppercase tracking-widest transition-all ${
+            className={`whitespace-nowrap px-6 py-3 rounded-xl text-xs font-black uppercase tracking-widest transition-all border-2 ${
               currentActiveMonth === "All"
-                ? "bg-[#0047BB] text-white shadow-md shadow-blue-500/20"
-                : "bg-white text-slate-500 border border-slate-200 hover:bg-slate-100"
+                ? "bg-[#100287] border-[#100287] text-white shadow-lg shadow-blue-600/20"
+                : "bg-white border-slate-100 text-slate-400 hover:border-slate-200 hover:text-slate-600"
             }`}
           >
             All Transactions
@@ -250,10 +250,10 @@ export default function TransactionTable({ transactions, title = "All Orders" }:
             <button
               key={m}
               onClick={() => handleMonthChange(m)}
-              className={`whitespace-nowrap px-4 py-2 rounded-full text-[11px] font-black uppercase tracking-widest transition-all ${
+              className={`whitespace-nowrap px-6 py-3 rounded-xl text-xs font-black uppercase tracking-widest transition-all border-2 ${
                 currentActiveMonth === m
-                  ? "bg-[#0047BB] text-white shadow-md shadow-blue-500/20"
-                  : "bg-white text-slate-500 border border-slate-200 hover:bg-slate-100"
+                  ? "bg-[#100287] border-[#100287] text-white shadow-lg shadow-blue-600/20"
+                  : "bg-white border-slate-100 text-slate-400 hover:border-slate-200 hover:text-slate-600"
               }`}
             >
               {m}
@@ -264,16 +264,16 @@ export default function TransactionTable({ transactions, title = "All Orders" }:
 
       {/* Secondary Tabs for Days of Trip */}
       {currentActiveMonth !== "All" && groupedData[currentActiveMonth] && (
-        <div className="px-8 py-3 border-b border-slate-100 flex items-center gap-2 overflow-x-auto no-scrollbar bg-slate-50/20">
+        <div className="px-8 py-4 border-b border-slate-100 flex items-center gap-3 overflow-x-auto no-scrollbar bg-slate-50/50">
           <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest mr-2 flex-shrink-0">
             Trip Day:
           </span>
           <button
             onClick={() => setActiveDay("All Days")}
-            className={`whitespace-nowrap px-3 py-1.5 rounded-full text-[10px] font-bold transition-all flex-shrink-0 ${
+            className={`whitespace-nowrap px-5 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all border-2 flex-shrink-0 ${
               activeDay === "All Days"
-                ? "bg-slate-800 text-white shadow-sm"
-                : "bg-white text-slate-500 border border-slate-200 hover:bg-slate-100"
+                ? "bg-slate-800 border-slate-800 text-white shadow-lg shadow-slate-900/20"
+                : "bg-white border-slate-100 text-slate-400 hover:border-slate-200 hover:text-slate-600"
             }`}
           >
             All Days
@@ -282,10 +282,10 @@ export default function TransactionTable({ transactions, title = "All Orders" }:
             <button
               key={d}
               onClick={() => setActiveDay(d)}
-              className={`whitespace-nowrap px-3 py-1.5 rounded-full text-[10px] font-bold transition-all flex-shrink-0 ${
+              className={`whitespace-nowrap px-5 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all border-2 flex-shrink-0 ${
                 activeDay === d
-                  ? "bg-slate-800 text-white shadow-sm"
-                  : "bg-white text-slate-500 border border-slate-200 hover:bg-slate-100"
+                  ? "bg-slate-800 border-slate-800 text-white shadow-lg shadow-slate-900/20"
+                  : "bg-white border-slate-100 text-slate-400 hover:border-slate-200 hover:text-slate-600"
               }`}
             >
               {d}
