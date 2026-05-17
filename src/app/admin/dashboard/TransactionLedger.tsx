@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useState, useCallback } from "react";
 import TransactionTable from "./TransactionTable";
 
 interface Transaction {
@@ -38,18 +38,30 @@ export default function TransactionLedger({
   allTransactions,
   recentTransactions,
 }: TransactionLedgerProps) {
-  // Calculate Global Stats
+  const [filteredStats, setFilteredStats] = useState<StatTransaction[] | Transaction[]>(allTransactions);
+  const [isAllTime, setIsAllTime] = useState(true);
+
+  const handleFilteredChange = useCallback((transactions: Transaction[], isAll: boolean) => {
+    setIsAllTime(isAll);
+    if (isAll) {
+      setFilteredStats(allTransactions);
+    } else {
+      setFilteredStats(transactions);
+    }
+  }, [allTransactions]);
+
+  // Calculate Global or Filtered Stats
   const stats = useMemo(() => {
-    const successfulOnes = allTransactions.filter(
+    const successfulOnes = filteredStats.filter(
       (t) => t.status === "success" || t.status === "test_success"
     );
     const totalRevenue = successfulOnes.reduce((acc, t) => acc + (t.amount || 0), 0);
     const successCount = successfulOnes.length;
-    const totalCheckouts = allTransactions.length;
+    const totalCheckouts = filteredStats.length;
     const avgOrderValue = successCount > 0 ? totalRevenue / successCount : 0;
 
     return { totalRevenue, successCount, totalCheckouts, avgOrderValue };
-  }, [allTransactions]);
+  }, [filteredStats]);
 
   const formatNaira = (amt: number) =>
     new Intl.NumberFormat("en-NG", {
@@ -68,7 +80,7 @@ export default function TransactionLedger({
             <span className="material-symbols-outlined text-9xl text-[#0047BB]">payments</span>
           </div>
           <p className="text-[10px] md:text-xs font-black text-slate-400 uppercase tracking-widest mb-2">
-            Revenue (All Time)
+            Revenue {isAllTime ? "(All Time)" : "(Selected)"}
           </p>
           <div className="flex items-baseline gap-2">
             <h3 className="text-2xl md:text-3xl font-black text-[#0047BB]">
@@ -86,7 +98,7 @@ export default function TransactionLedger({
             <span className="material-symbols-outlined text-9xl text-orange-600">bar_chart</span>
           </div>
           <p className="text-[10px] md:text-xs font-black text-slate-400 uppercase tracking-widest mb-2">
-            Checkouts (Total)
+            Checkouts {isAllTime ? "(Total)" : "(Selected)"}
           </p>
           <div className="flex items-baseline gap-2">
             <h3 className="text-2xl md:text-3xl font-black text-slate-900">
@@ -104,7 +116,7 @@ export default function TransactionLedger({
             <span className="material-symbols-outlined text-9xl text-white">analytics</span>
           </div>
           <p className="text-[10px] md:text-xs font-black text-slate-500 uppercase tracking-widest mb-2">
-            Avg. Size (Overall)
+            Avg. Size {isAllTime ? "(Overall)" : "(Selected)"}
           </p>
           <div className="flex items-baseline gap-2">
             <h3 className="text-2xl md:text-3xl font-black text-white">
@@ -118,7 +130,11 @@ export default function TransactionLedger({
       </div>
 
       {/* Transaction Table */}
-      <TransactionTable transactions={recentTransactions} title="All Orders" />
+      <TransactionTable 
+        transactions={recentTransactions} 
+        title="All Orders" 
+        onFilteredTransactionsChange={handleFilteredChange}
+      />
     </div>
   );
 }
