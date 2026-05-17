@@ -51,20 +51,20 @@ function getMonthYearAndDay(tr: Transaction) {
     d = new Date(tr.created_at || tr.paid_at || "");
   }
 
-  if (isNaN(d.getTime())) {
-    return { monthYear: "Unknown", day: "Unknown", rawDate: 0 };
-  }
+  const monthYear = isNaN(d.getTime()) 
+    ? "Unknown" 
+    : d.toLocaleDateString("en-US", { month: "long", year: "numeric" });
+  
+  // Use the exact text provided in the database for the trip date grouping
+  const day = tr.date && tr.date !== "Not Set" ? tr.date : "Not Set";
 
-  return {
-    monthYear: d.toLocaleDateString("en-US", { month: "long", year: "numeric" }),
-    day: d.toLocaleDateString("en-US", { weekday: 'short', day: "numeric", month: "long", year: "numeric" }),
-    rawDate: d.getTime()
-  };
+  return { monthYear, day, rawDate: isNaN(d.getTime()) ? 0 : d.getTime() };
 }
 
 export default function TransactionTable({ transactions, title = "All Orders" }: TransactionTableProps) {
   const [searchTerm, setSearchTerm] = useState("");
-  const [activeMonth, setActiveMonth] = useState("All");
+  const [activeMonth, setActiveMonth] = useState<string | null>(null);
+  const [activeDay, setActiveDay] = useState("All Days");
 
   const filtered = useMemo(() => {
     return transactions.filter((tr) => {
@@ -127,6 +127,13 @@ export default function TransactionTable({ transactions, title = "All Orders" }:
 
     return { groupedData: groups, sortedMonths: sortedM };
   }, [filtered]);
+
+  const currentActiveMonth = activeMonth === null ? (sortedMonths.length > 0 ? sortedMonths[0] : "All") : activeMonth;
+
+  const handleMonthChange = (m: string) => {
+    setActiveMonth(m);
+    setActiveDay("All Days");
+  };
 
   const renderRow = (tr: Transaction) => (
     <tr key={tr.id} className="hover:bg-slate-50 transition-colors group">
@@ -226,13 +233,13 @@ export default function TransactionTable({ transactions, title = "All Orders" }:
         </div>
       </div>
 
-      {/* Tabs for Months */}
+      {/* Primary Tabs for Months */}
       {sortedMonths.length > 0 && (
         <div className="px-8 py-4 border-b border-slate-100 flex gap-2 overflow-x-auto no-scrollbar bg-slate-50/50">
           <button
-            onClick={() => setActiveMonth("All")}
+            onClick={() => handleMonthChange("All")}
             className={`whitespace-nowrap px-4 py-2 rounded-full text-[11px] font-black uppercase tracking-widest transition-all ${
-              activeMonth === "All"
+              currentActiveMonth === "All"
                 ? "bg-[#0047BB] text-white shadow-md shadow-blue-500/20"
                 : "bg-white text-slate-500 border border-slate-200 hover:bg-slate-100"
             }`}
@@ -242,14 +249,46 @@ export default function TransactionTable({ transactions, title = "All Orders" }:
           {sortedMonths.map(m => (
             <button
               key={m}
-              onClick={() => setActiveMonth(m)}
+              onClick={() => handleMonthChange(m)}
               className={`whitespace-nowrap px-4 py-2 rounded-full text-[11px] font-black uppercase tracking-widest transition-all ${
-                activeMonth === m
+                currentActiveMonth === m
                   ? "bg-[#0047BB] text-white shadow-md shadow-blue-500/20"
                   : "bg-white text-slate-500 border border-slate-200 hover:bg-slate-100"
               }`}
             >
               {m}
+            </button>
+          ))}
+        </div>
+      )}
+
+      {/* Secondary Tabs for Days of Trip */}
+      {currentActiveMonth !== "All" && groupedData[currentActiveMonth] && (
+        <div className="px-8 py-3 border-b border-slate-100 flex items-center gap-2 overflow-x-auto no-scrollbar bg-slate-50/20">
+          <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest mr-2 flex-shrink-0">
+            Trip Day:
+          </span>
+          <button
+            onClick={() => setActiveDay("All Days")}
+            className={`whitespace-nowrap px-3 py-1.5 rounded-full text-[10px] font-bold transition-all flex-shrink-0 ${
+              activeDay === "All Days"
+                ? "bg-slate-800 text-white shadow-sm"
+                : "bg-white text-slate-500 border border-slate-200 hover:bg-slate-100"
+            }`}
+          >
+            All Days
+          </button>
+          {Object.keys(groupedData[currentActiveMonth]).map(d => (
+            <button
+              key={d}
+              onClick={() => setActiveDay(d)}
+              className={`whitespace-nowrap px-3 py-1.5 rounded-full text-[10px] font-bold transition-all flex-shrink-0 ${
+                activeDay === d
+                  ? "bg-slate-800 text-white shadow-sm"
+                  : "bg-white text-slate-500 border border-slate-200 hover:bg-slate-100"
+              }`}
+            >
+              {d}
             </button>
           ))}
         </div>
@@ -298,35 +337,49 @@ export default function TransactionTable({ transactions, title = "All Orders" }:
                 </td>
               </tr>
             </tbody>
-          ) : activeMonth === "All" ? (
+          ) : currentActiveMonth === "All" ? (
             <tbody className="divide-y divide-slate-50">
               {filtered.map(renderRow)}
             </tbody>
           ) : (
-            groupedData[activeMonth] ? (
-              Object.entries(groupedData[activeMonth]).map(([day, dayTransactions]) => (
-                <tbody key={day} className="divide-y divide-slate-50">
-                  {/* Day Subheader */}
-                  <tr className="bg-slate-50/80 border-y border-slate-100">
-                    <td colSpan={8} className="px-8 py-3">
-                      <div className="flex items-center gap-2">
-                        <span className="material-symbols-outlined text-sm text-[#0047BB]">event</span>
-                        <span className="text-xs font-black text-slate-800 uppercase tracking-widest">{day}</span>
-                        <span className="ml-2 text-[10px] font-bold text-slate-400 bg-white px-2 py-0.5 rounded-md border border-slate-200 shadow-sm">
-                          {dayTransactions.length} transaction{dayTransactions.length !== 1 ? "s" : ""}
-                        </span>
-                      </div>
-                    </td>
-                  </tr>
-                  {/* Day Transactions */}
-                  {dayTransactions.map(renderRow)}
-                </tbody>
-              ))
+            groupedData[currentActiveMonth] ? (
+              activeDay === "All Days" ? (
+                Object.entries(groupedData[currentActiveMonth]).map(([day, dayTransactions]) => (
+                  <tbody key={day} className="divide-y divide-slate-50">
+                    <tr className="bg-slate-50/80 border-y border-slate-100">
+                      <td colSpan={8} className="px-8 py-3">
+                        <div className="flex items-center gap-2">
+                          <span className="material-symbols-outlined text-sm text-[#0047BB]">event</span>
+                          <span className="text-xs font-black text-slate-800 uppercase tracking-widest">{day}</span>
+                          <span className="ml-2 text-[10px] font-bold text-slate-400 bg-white px-2 py-0.5 rounded-md border border-slate-200 shadow-sm">
+                            {dayTransactions.length} transaction{dayTransactions.length !== 1 ? "s" : ""}
+                          </span>
+                        </div>
+                      </td>
+                    </tr>
+                    {dayTransactions.map(renderRow)}
+                  </tbody>
+                ))
+              ) : (
+                groupedData[currentActiveMonth][activeDay] ? (
+                  <tbody className="divide-y divide-slate-50">
+                    {groupedData[currentActiveMonth][activeDay].map(renderRow)}
+                  </tbody>
+                ) : (
+                  <tbody>
+                    <tr>
+                      <td colSpan={8} className="px-8 py-20 text-center text-slate-400 font-bold bg-slate-50/20">
+                        No transactions found for this day.
+                      </td>
+                    </tr>
+                  </tbody>
+                )
+              )
             ) : (
               <tbody>
                 <tr>
                   <td colSpan={8} className="px-8 py-20 text-center text-slate-400 font-bold bg-slate-50/20">
-                    No transactions found for {activeMonth} with current filters.
+                    No transactions found for {currentActiveMonth} with current filters.
                   </td>
                 </tr>
               </tbody>
