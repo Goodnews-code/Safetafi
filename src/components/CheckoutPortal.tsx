@@ -38,7 +38,7 @@ function formatNaira(amount: number) {
 
 // ─── Component ───────────────────────────────────────────────────────────────
 
-export default function CheckoutPortal() {
+export default function CheckoutPortal({ onClose }: { onClose?: () => void }) {
   const portalRef = useRef<HTMLDivElement>(null);
   const [step, setStep] = useState<"form" | "paused" | "confirm" | "success" | "failed">("form");
   const [verifying, setVerifying] = useState(false);
@@ -204,8 +204,17 @@ export default function CheckoutPortal() {
       {(selectedGateway === "monnify" || selectedGateway === "both") && (
         <Script src="https://sdk.monnify.com/plugin/monnify.js" strategy="lazyOnload" />
       )}
-      <div ref={portalRef} className="w-full max-w-xl mx-auto scroll-mt-24">
+      <div ref={portalRef} className="w-full max-w-xl mx-auto scroll-mt-24 relative">
       <div className="bg-white/95 rounded-[3rem] shadow-2xl shadow-blue-900/10 border border-white/50 overflow-hidden relative group">
+        
+        {onClose && (
+          <button 
+            onClick={onClose}
+            className="absolute top-6 right-6 w-10 h-10 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-full flex items-center justify-center transition-colors z-20"
+          >
+            <span className="material-symbols-outlined">close</span>
+          </button>
+        )}
 
         <div className="absolute top-0 inset-x-0 h-1.5 flex gap-1 px-1 py-1">
           <div className={`h-full rounded-full transition-all duration-700 ${step === 'form' ? 'w-1/4 bg-[#100287]' :

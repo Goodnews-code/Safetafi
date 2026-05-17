@@ -17,9 +17,9 @@ export default function LandingPageClient() {
   const [paymentOpen, setPaymentOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-[#F4F7FA] relative overflow-x-hidden flex flex-col font-sans">
+    <div className="relative overflow-x-hidden flex flex-col font-sans w-full min-h-screen">
       <Navbar onPayNowClick={() => setPaymentOpen(true)} />
-      <main>
+      <main className="flex-1">
         <HeroSection onPayNowClick={() => setPaymentOpen(true)} />
         <WhyUsSection />
         <AboutSection />
