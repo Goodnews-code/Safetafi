@@ -14,6 +14,9 @@ SAFETAFI is a Next.js web application for a Nigerian transport and logistics com
 ## Key Features
 
 - **Multi-Gateway Payments:** Support for both Paystack and Monnify.
+  - **Dynamic Inactive Location Filtering:** The checkout portal dynamically parses and filters out any pickup points disabled by the admin in real-time, preventing unauthorized bookings.
+  - **Active Selection Correction:** If a customer's previously selected location becomes disabled during their session, the checkout selection seamlessly auto-resets to the first active pickup point.
+- **Improved Hydration Resilience:** Safe and warning-free SSR rendering optimized against common browser extension injects (like Grammarly) on the primary body wrapper.
 - **Dynamic Trip Control:** Admins can toggle payment accessibility and set trip dates in real-time.
 - **Enhanced Admin Dashboard:** 
   - Real-time transaction monitoring.
