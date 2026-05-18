@@ -30,12 +30,12 @@ export async function GET() {
   }
 
   const defaultPricing = [
-    { id: "berger", label: "Berger", amount: 11000, icon: "location_on" },
-    { id: "oshodi", label: "Oshodi", amount: 12000, icon: "location_on" },
-    { id: "iyanapaja", label: "Iyanapaja", amount: 12500, icon: "location_on" },
-    { id: "abeokuta", label: "Abeokuta", amount: 12000, icon: "location_on" },
-    { id: "ibadan", label: "Ibadan", amount: 5000, icon: "location_on" },
-    { id: "ikorodu", label: "Ikorodu", amount: 12500, icon: "location_on" },
+    { id: "berger", label: "Berger", amount: 11000, icon: "location_on", enabled: true },
+    { id: "oshodi", label: "Oshodi", amount: 12000, icon: "location_on", enabled: true },
+    { id: "iyanapaja", label: "Iyanapaja", amount: 12500, icon: "location_on", enabled: true },
+    { id: "abeokuta", label: "Abeokuta", amount: 12000, icon: "location_on", enabled: true },
+    { id: "ibadan", label: "Ibadan", amount: 5000, icon: "location_on", enabled: true },
+    { id: "ikorodu", label: "Ikorodu", amount: 12500, icon: "location_on", enabled: true },
   ];
 
   return NextResponse.json({
