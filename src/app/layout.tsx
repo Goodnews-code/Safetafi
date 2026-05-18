@@ -50,7 +50,7 @@ export default function RootLayout({
           />
         </noscript>
       </head>
-      <body className={`${publicSans.variable} font-sans antialiased`}>
+      <body className={`${publicSans.variable} font-sans antialiased`} suppressHydrationWarning>
         {children}
       </body>
     </html>

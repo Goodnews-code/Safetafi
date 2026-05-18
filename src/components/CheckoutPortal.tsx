@@ -17,15 +17,16 @@ interface ServiceOption {
   label: string;
   amount: number;
   icon: string;
+  enabled?: boolean;
 }
 
 const DEFAULT_SERVICE_OPTIONS: ServiceOption[] = [
-  { id: "berger", label: "Berger", amount: 11000, icon: "location_on" },
-  { id: "oshodi", label: "Oshodi", amount: 12000, icon: "location_on" },
-  { id: "iyanapaja", label: "Iyanapaja", amount: 12500, icon: "location_on" },
-  { id: "abeokuta", label: "Abeokuta", amount: 12000, icon: "location_on" },
-  { id: "ibadan", label: "Ibadan", amount: 5000, icon: "location_on" },
-  { id: "ikorodu", label: "Ikorodu", amount: 12500, icon: "location_on" },
+  { id: "berger", label: "Berger", amount: 11000, icon: "location_on", enabled: true },
+  { id: "oshodi", label: "Oshodi", amount: 12000, icon: "location_on", enabled: true },
+  { id: "iyanapaja", label: "Iyanapaja", amount: 12500, icon: "location_on", enabled: true },
+  { id: "abeokuta", label: "Abeokuta", amount: 12000, icon: "location_on", enabled: true },
+  { id: "ibadan", label: "Ibadan", amount: 5000, icon: "location_on", enabled: true },
+  { id: "ikorodu", label: "Ikorodu", amount: 12500, icon: "location_on", enabled: true },
 ];
 
 function formatNaira(amount: number) {
@@ -65,17 +66,25 @@ export default function CheckoutPortal({ onClose }: { onClose?: () => void }) {
     fetch("/api/public/settings")
       .then((r) => r.json())
       .then((data) => {
-        setDetails((prev) => ({ 
-          ...prev, 
-          date: data.trip_date ?? prev.date,
-          // If we haven't selected a service yet, update to the first live one
-          service: prev.service || (data.service_pricing?.[0]?.label ?? prev.service),
-          amount: prev.amount || (data.service_pricing?.[0]?.amount ?? prev.amount)
-        }));
+        const livePricing: ServiceOption[] = data.service_pricing || [];
         setPaymentsEnabled(data.payments_enabled ?? false);
         setSelectedGateway(data.payment_gateway || "paystack");
-        if (data.service_pricing) {
-          setServiceOptions(data.service_pricing);
+
+        if (livePricing.length > 0) {
+          setServiceOptions(livePricing);
+          setDetails((prev) => {
+            // If the currently selected service is still in the live list, keep it
+            const stillActive = livePricing.some((s) => s.label === prev.service);
+            const firstActive = livePricing[0];
+            return {
+              ...prev,
+              date: data.trip_date ?? prev.date,
+              service: stillActive ? prev.service : firstActive.label,
+              amount: stillActive ? prev.amount : firstActive.amount,
+            };
+          });
+        } else {
+          setDetails((prev) => ({ ...prev, date: data.trip_date ?? prev.date }));
         }
       })
       .catch(() => {

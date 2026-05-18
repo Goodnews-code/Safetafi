@@ -49,7 +49,11 @@ Using the **Trip Control** and **Pricing** panels, administrators can:
 - **Toggle Payments (On/Off):** Instantly pause or resume payment processing globally. When payments are disabled, the checkout portal seamlessly switches to a dynamic "We'll Be Right Back" state to prevent bookings.
 - **Dynamic Payment Gateway:** Switch the active payment provider seamlessly between **Paystack** and **Monnify**. The checkout portal instantly adapts to use the selected SDK without requiring code redeployments or environment variable changes.
 - **Schedule Upcoming Trips:** Set the exact target date for the next transport service. This dynamically updates the user-facing booking portal to reflect the precise upcoming schedule.
-- **Pricing Management:** Update base transport fares across all available routes and destinations dynamically.
+- **Pricing & Location Management:**
+  - **Dynamic Price Editing:** Update base transport fares across all available routes and destinations dynamically.
+  - **Location Toggle (On/Off):** Disable/enable pickup points instantly. Inactive locations are automatically hidden from the checkout selection dropdown in real-time.
+  - **Add/Delete Locations:** Create new logistics routes or permanently delete existing ones with safety prompt boundaries directly from the administration dashboard.
+  - **Focus-Enhanced Inputs:** Numerical inputs auto-clear default zero values on focus for a smoother editing experience.
 
 ## 🛠️ Technology Stack
 
