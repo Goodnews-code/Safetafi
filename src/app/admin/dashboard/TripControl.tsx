@@ -33,13 +33,18 @@ export default function TripControl() {
       showToast("error", "Please enter a trip date.");
       return;
     }
+
+    // Auto-fix missing comma after weekday (e.g. "Wednesday 19" -> "Wednesday, 19")
+    const normalizedTripDate = tripDate.trim().replace(/^(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday)\b(?!,)/i, "$1,");
+    setTripDate(normalizedTripDate);
+
     setSaving(true);
     try {
       const res = await fetch("/api/admin/settings", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ 
-          trip_date: tripDate, 
+          trip_date: normalizedTripDate, 
           payments_enabled: paymentsEnabled,
           payment_gateway: paymentGateway 
         }),
