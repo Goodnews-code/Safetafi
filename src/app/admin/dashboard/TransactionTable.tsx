@@ -57,7 +57,11 @@ function getMonthYearAndDay(tr: Transaction) {
     : d.toLocaleDateString("en-US", { month: "long", year: "numeric" });
   
   // Use the exact text provided in the database for the trip date grouping
-  const day = tr.date && tr.date !== "Not Set" ? tr.date : "Not Set";
+  let day = tr.date && tr.date !== "Not Set" ? tr.date : "Not Set";
+  if (day !== "Not Set") {
+    // Normalize missing comma after weekday (e.g. "Wednesday 19" -> "Wednesday, 19")
+    day = day.replace(/^(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday)\b(?!,)/i, "$1,");
+  }
 
   return { monthYear, day, rawDate: isNaN(d.getTime()) ? 0 : d.getTime() };
 }

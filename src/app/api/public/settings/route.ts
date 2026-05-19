@@ -34,8 +34,11 @@ export async function GET() {
   }
 
   // Parse the stored pricing and filter out any location the admin has disabled
+  // Ensure amount is always a number (input fields return strings)
   const rawPricing = settings.service_pricing ? JSON.parse(settings.service_pricing) : defaultPricing;
-  const activePricing = rawPricing.filter((p: any) => p.enabled !== false);
+  const activePricing = rawPricing
+    .filter((p: any) => p.enabled !== false)
+    .map((p: any) => ({ ...p, amount: Number(p.amount) }));
 
   return NextResponse.json(
     {
@@ -46,8 +49,8 @@ export async function GET() {
     },
     {
       headers: {
-        // Short cache so changes propagate quickly
-        "Cache-Control": "public, max-age=30, stale-while-revalidate=60",
+        // No caching — price/location changes must reflect immediately
+        "Cache-Control": "no-store",
       },
     }
   );
