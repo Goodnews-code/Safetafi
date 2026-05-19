@@ -73,14 +73,15 @@ export default function CheckoutPortal({ onClose }: { onClose?: () => void }) {
         if (livePricing.length > 0) {
           setServiceOptions(livePricing);
           setDetails((prev) => {
-            // If the currently selected service is still in the live list, keep it
-            const stillActive = livePricing.some((s) => s.label === prev.service);
+            // If the currently selected service is still in the live list, keep the label
+            // but ALWAYS use the live price from the API (not the stale local default)
+            const matchedService = livePricing.find((s) => s.label === prev.service);
             const firstActive = livePricing[0];
             return {
               ...prev,
               date: data.trip_date ?? prev.date,
-              service: stillActive ? prev.service : firstActive.label,
-              amount: stillActive ? prev.amount : firstActive.amount,
+              service: matchedService ? matchedService.label : firstActive.label,
+              amount: matchedService ? matchedService.amount : firstActive.amount,
             };
           });
         } else {
