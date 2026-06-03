@@ -1,5 +1,6 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { getSupabase } from "@/lib/supabase";
 
 export default async function AdminLogin(props: { searchParams?: Promise<{ error?: string }> }) {
   const searchParams = await props.searchParams;
@@ -14,15 +15,20 @@ export default async function AdminLogin(props: { searchParams?: Promise<{ error
 
   async function handleLogin(formData: FormData) {
     "use server";
+    const email = formData.get("email") as string;
     const password = formData.get("password") as string;
-    const correctPassword = process.env.DASHBOARD_PASSCODE;
 
-    // Critical check for Netlify deployment
-    if (!correctPassword) {
-      redirect("/admin?error=server_config_missing");
+    const supabase = getSupabase();
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+
+    if (error) {
+      redirect(`/admin?error=${encodeURIComponent(error.message)}`);
     }
 
-    if (password === correctPassword) {
+    if (data?.user) {
       const cookieStore = await cookies();
       cookieStore.set("admin_session", "authenticated", {
         httpOnly: true,
@@ -32,14 +38,11 @@ export default async function AdminLogin(props: { searchParams?: Promise<{ error
       });
       redirect("/admin/dashboard");
     } else {
-       redirect("/admin?error=invalid_passcode");
+      redirect("/admin?error=Unauthorized");
     }
   }
 
-  const errorMessage = 
-    error === "invalid_passcode" ? "Access Denied: Incorrect passcode." :
-    error === "server_config_missing" ? "Server Error: DASHBOARD_PASSCODE is not set in environment." :
-    null;
+  const errorMessage = error ? decodeURIComponent(error) : null;
 
   return (
     <div className="min-h-screen bg-[#F4F7FA] relative overflow-hidden flex items-center justify-center p-6 font-sans">
@@ -91,7 +94,25 @@ export default async function AdminLogin(props: { searchParams?: Promise<{ error
           <form action={handleLogin} className="space-y-6">
             <div>
               <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 ml-1">
-                Security Passcode
+                Admin Email Address
+              </label>
+              <div className="relative group">
+                <span className="absolute inset-y-0 left-5 flex items-center text-slate-400 group-focus-within:text-[#100287] transition-colors">
+                  <span className="material-symbols-outlined">mail</span>
+                </span>
+                <input
+                   required
+                   name="email"
+                   type="email"
+                   placeholder="admin@safetafi.com"
+                   className="w-full bg-slate-50 border border-slate-100 rounded-2xl pl-14 pr-6 py-4 outline-none focus:ring-4 focus:ring-indigo-100 focus:border-[#100287] transition-all"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 ml-1">
+                Security Password
               </label>
               <div className="relative group">
                 <span className="absolute inset-y-0 left-5 flex items-center text-slate-400 group-focus-within:text-[#100287] transition-colors">
