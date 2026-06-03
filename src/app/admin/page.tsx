@@ -105,7 +105,7 @@ export default async function AdminLogin(props: { searchParams?: Promise<{ error
                    name="email"
                    type="email"
                    placeholder="admin@safetafi.com"
-                   className="w-full bg-slate-50 border border-slate-100 rounded-2xl pl-14 pr-6 py-4 outline-none focus:ring-4 focus:ring-indigo-100 focus:border-[#100287] transition-all"
+                   className="w-full bg-slate-50 border border-slate-100 rounded-2xl pl-14 pr-6 py-4 outline-none focus:ring-4 focus:ring-indigo-100 focus:border-[#100287] transition-all placeholder:opacity-30"
                 />
               </div>
             </div>
@@ -123,7 +123,7 @@ export default async function AdminLogin(props: { searchParams?: Promise<{ error
                    name="password"
                    type="password"
                    placeholder="••••••••••••••••"
-                   className="w-full bg-slate-50 border border-slate-100 rounded-2xl pl-14 pr-6 py-4 outline-none focus:ring-4 focus:ring-indigo-100 focus:border-[#100287] transition-all font-mono tracking-widest"
+                   className="w-full bg-slate-50 border border-slate-100 rounded-2xl pl-14 pr-6 py-4 outline-none focus:ring-4 focus:ring-indigo-100 focus:border-[#100287] transition-all font-mono tracking-widest placeholder:opacity-30"
                 />
               </div>
             </div>
