@@ -1,6 +1,7 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { getSupabase } from "@/lib/supabase";
+import LoginSubmitButton from "./LoginSubmitButton";
 
 export default async function AdminLogin(props: { searchParams?: Promise<{ error?: string }> }) {
   const searchParams = await props.searchParams;
@@ -128,13 +129,7 @@ export default async function AdminLogin(props: { searchParams?: Promise<{ error
               </div>
             </div>
 
-            <button
-               type="submit"
-               className="w-full bg-[#100287] text-white py-5 rounded-2xl font-black hover:bg-[#030301] transition-all shadow-xl shadow-blue-600/20 text-lg flex items-center justify-center gap-2 group transform active:scale-[0.98]"
-            >
-              Sign into Dashboard
-              <span className="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
-            </button>
+            <LoginSubmitButton />
           </form>
 
           {/* Footer of Card */}
