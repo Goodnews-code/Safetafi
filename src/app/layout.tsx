@@ -15,9 +15,9 @@ export const metadata: Metadata = {
     "From Lagos to Kano, SAFETAFI bridges the gap between businesses and markets with end-to-end transport solutions designed for the modern economy. Reliable, safe, and trackable.",
   keywords: "Nigeria logistics, transport Nigeria, road haulage, vehicle hire, supply chain Nigeria, SAFETAFI",
   icons: {
-    icon: [{ url: "/icon.svg", type: "image/svg+xml" }],
-    apple: [{ url: "/icon.svg", type: "image/svg+xml" }],
-    shortcut: "/icon.svg",
+    icon: [{ url: "/logo.svg", type: "image/svg+xml" }],
+    apple: [{ url: "/logo.svg", type: "image/svg+xml" }],
+    shortcut: "/logo.svg",
   },
   openGraph: {
     title: "SAFETAFI | Trusted Nigerian Transport & Logistics Solutions",
