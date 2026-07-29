@@ -4,7 +4,7 @@ import Footer from "@/components/Footer";
 import DynamicCheckoutPortal from "@/components/DynamicCheckoutPortal";
 
 export const metadata: Metadata = {
-  title: "Book Your Trip | Safetafi Express",
+  title: "SAFETAFI | Trusted Nigerian Transport & Logistics Solutions",
   description: "Secure your seat on the next Safetafi trip. Select your meeting point and pay safely online.",
 };
 
