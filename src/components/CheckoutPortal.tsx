@@ -20,7 +20,26 @@ interface ServiceOption {
   enabled?: boolean;
 }
 
+interface PickupPoint {
+  id: string;
+  label: string;
+  enabled?: boolean;
+}
+
 const DEFAULT_SERVICE_OPTIONS: ServiceOption[] = [
+  { id: "berger", label: "Berger", amount: 11000, icon: "location_on", enabled: true },
+  { id: "oshodi", label: "Oshodi", amount: 12000, icon: "location_on", enabled: true },
+  { id: "iyanapaja", label: "Iyanapaja", amount: 12500, icon: "location_on", enabled: true },
+  { id: "abeokuta", label: "Abeokuta", amount: 12000, icon: "location_on", enabled: true },
+  { id: "ibadan", label: "Ibadan", amount: 5000, icon: "location_on", enabled: true },
+  { id: "ikorodu", label: "Ikorodu", amount: 12500, icon: "location_on", enabled: true },
+];
+
+const DEFAULT_RETURN_PICKUP_POINTS: PickupPoint[] = [
+  { id: "campus_gate", label: "Campus Gate", enabled: true },
+];
+
+const DEFAULT_RETURN_PRICING: ServiceOption[] = [
   { id: "berger", label: "Berger", amount: 11000, icon: "location_on", enabled: true },
   { id: "oshodi", label: "Oshodi", amount: 12000, icon: "location_on", enabled: true },
   { id: "iyanapaja", label: "Iyanapaja", amount: 12500, icon: "location_on", enabled: true },
@@ -48,7 +67,10 @@ export default function CheckoutPortal({ onClose }: { onClose?: () => void }) {
   const [settingsLoading, setSettingsLoading] = useState(true);
   const [paymentsEnabled, setPaymentsEnabled] = useState(false);
   const [selectedGateway, setSelectedGateway] = useState<"paystack" | "monnify" | "both">("paystack");
+  const [tripDirection, setTripDirection] = useState<"to_campus" | "from_campus">("to_campus");
   const [serviceOptions, setServiceOptions] = useState<ServiceOption[]>(DEFAULT_SERVICE_OPTIONS);
+  const [returnPickupOptions, setReturnPickupOptions] = useState<PickupPoint[]>(DEFAULT_RETURN_PICKUP_POINTS);
+  const [returnPricingOptions, setReturnPricingOptions] = useState<ServiceOption[]>(DEFAULT_RETURN_PRICING);
 
   const [details, setDetails] = useState({
     name: "",
@@ -67,26 +89,45 @@ export default function CheckoutPortal({ onClose }: { onClose?: () => void }) {
       .then((r) => r.json())
       .then((data) => {
         const livePricing: ServiceOption[] = data.service_pricing || [];
+        const dir: "to_campus" | "from_campus" = data.trip_direction || "to_campus";
+        const liveReturnPickup: PickupPoint[] = data.return_pickup_points || [];
+        const liveReturnPricing: ServiceOption[] = data.return_pricing || [];
+
         setPaymentsEnabled(data.payments_enabled ?? false);
         setSelectedGateway(data.payment_gateway || "paystack");
+        setTripDirection(dir);
+        if (livePricing.length > 0) setServiceOptions(livePricing);
+        if (liveReturnPickup.length > 0) setReturnPickupOptions(liveReturnPickup);
+        if (liveReturnPricing.length > 0) setReturnPricingOptions(liveReturnPricing);
 
-        if (livePricing.length > 0) {
-          setServiceOptions(livePricing);
-          setDetails((prev) => {
-            // If the currently selected service is still in the live list, keep the label
-            // but ALWAYS use the live price from the API (not the stale local default)
-            const matchedService = livePricing.find((s) => s.label === prev.service);
-            const firstActive = livePricing[0];
+        setDetails((prev) => {
+          const tripDate = data.trip_date ?? prev.date;
+          if (dir === "from_campus") {
+            const firstPickup = liveReturnPickup[0]?.label || "Campus Gate";
+            const matchedPickup = liveReturnPickup.find((p) => p.label === prev.service)?.label || firstPickup;
+
+            const firstDest = liveReturnPricing[0] || DEFAULT_RETURN_PRICING[0];
+            const matchedDest = liveReturnPricing.find((p) => p.label === prev.destination) || firstDest;
+
             return {
               ...prev,
-              date: data.trip_date ?? prev.date,
+              date: tripDate,
+              service: matchedPickup,
+              destination: matchedDest.label,
+              amount: matchedDest.amount,
+            };
+          } else {
+            const matchedService = livePricing.find((s) => s.label === prev.service);
+            const firstActive = livePricing[0] || DEFAULT_SERVICE_OPTIONS[0];
+            return {
+              ...prev,
+              date: tripDate,
               service: matchedService ? matchedService.label : firstActive.label,
               amount: matchedService ? matchedService.amount : firstActive.amount,
+              destination: prev.destination || "Campus Gate",
             };
-          });
-        } else {
-          setDetails((prev) => ({ ...prev, date: data.trip_date ?? prev.date }));
-        }
+          }
+        });
       })
       .catch(() => {
         // Keep defaults if API fails
@@ -120,8 +161,9 @@ export default function CheckoutPortal({ onClose }: { onClose?: () => void }) {
         { display_name: "Customer Name", variable_name: "name", value: details.name },
         { display_name: "Phone", variable_name: "phone", value: details.phone },
         { display_name: "Scheduled Date", variable_name: "date", value: details.date },
-        { display_name: "Meeting Point", variable_name: "service", value: details.service },
-        { display_name: "Destination", variable_name: "destination", value: details.destination },
+        { display_name: tripDirection === "from_campus" ? "Pickup Point" : "Meeting Point", variable_name: "service", value: details.service },
+        { display_name: tripDirection === "from_campus" ? "Drop-off Destination" : "Destination", variable_name: "destination", value: details.destination },
+        { display_name: "Trip Direction", variable_name: "trip_direction", value: tripDirection },
         { display_name: "Additional Info", variable_name: "description", value: details.description },
       ],
     },
@@ -177,12 +219,13 @@ export default function CheckoutPortal({ onClose }: { onClose?: () => void }) {
       customerEmail: details.email,
       apiKey: process.env.NEXT_PUBLIC_MONNIFY_API_KEY,
       contractCode: process.env.NEXT_PUBLIC_MONNIFY_CONTRACT_CODE,
-      paymentDescription: `Booking for ${details.service} - ${details.date}`,
+      paymentDescription: `Booking for ${details.service} to ${details.destination} - ${details.date}`,
       metadata: {
         name: details.name,
         phone: details.phone,
         service: details.service,
         destination: details.destination,
+        trip_direction: tripDirection,
         date: details.date,
         description: details.description,
       },
@@ -238,7 +281,7 @@ export default function CheckoutPortal({ onClose }: { onClose?: () => void }) {
           <div className={`${step === 'paused' ? 'mb-2' : 'mb-8'} text-center`}>
             <img src="/logo.svg" alt="Safetafi" className="h-10 mx-auto mb-4" />
             <h2 className="text-3xl font-black text-slate-900 tracking-tight">
-              {step === 'form' && "Book Your Express Service"}
+              {step === 'form' && (tripDirection === "from_campus" ? "Book Your Return Trip" : "Book Your Express Service")}
               {step === 'paused' && "We\'ll Be Right Back"}
               {step === 'confirm' && "Review & Pay"}
               {step === 'success' && "Transaction Complete"}
@@ -248,6 +291,21 @@ export default function CheckoutPortal({ onClose }: { onClose?: () => void }) {
 
           {step === 'form' && (
             <form onSubmit={(e) => { e.preventDefault(); setStep(paymentsEnabled ? 'confirm' : 'paused'); }} className="space-y-6">
+
+              {/* Trip Direction Badge */}
+              <div className="flex justify-center">
+                {tripDirection === "from_campus" ? (
+                  <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-blue-50 text-[#100287] rounded-full text-[10px] font-black uppercase tracking-wider border border-blue-200 shadow-sm">
+                    <span className="material-symbols-outlined text-xs text-[#100287]">home</span>
+                    Returning Home Trip
+                  </div>
+                ) : (
+                  <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-blue-50 text-[#100287] rounded-full text-[10px] font-black uppercase tracking-wider border border-blue-100 shadow-sm">
+                    <span className="material-symbols-outlined text-xs">school</span>
+                    Going to Campus Trip
+                  </div>
+                )}
+              </div>
 
               <div className="grid md:grid-cols-2 gap-4">
                 <div>
@@ -299,40 +357,111 @@ export default function CheckoutPortal({ onClose }: { onClose?: () => void }) {
                 </div>
               </div>
 
-              <div className="grid md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 ml-1">Destination *</label>
-                  <select
-                    required
-                    value={details.destination}
-                    onChange={(e) => setDetails({ ...details, destination: e.target.value })}
-                    className="w-full bg-slate-50 border border-slate-100 px-6 py-4 rounded-2xl outline-none focus:ring-4 focus:ring-blue-100 focus:border-[#100287] transition-all font-bold text-slate-700 cursor-pointer appearance-none"
-                  >
-                    <option value="Campus Gate">Campus Gate</option>
-                    <option value="Hostels on Campus">Hostels on Campus</option>
-                  </select>
-                </div>
-              </div>
+              {tripDirection === "from_campus" ? (
+                <>
+                  {/* Return Trip: Pickup Point (no price) */}
+                  <div>
+                    <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 ml-1">
+                      Pickup Point (On Campus) *
+                    </label>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                      {returnPickupOptions.map((item) => (
+                        <button
+                          key={item.id}
+                          type="button"
+                          onClick={() => setDetails({ ...details, service: item.label })}
+                          className={`flex items-center gap-3 p-4 rounded-2xl border-2 transition-all text-left ${
+                            details.service === item.label
+                              ? "border-[#100287] bg-blue-50/70"
+                              : "border-slate-100 bg-white hover:border-slate-200"
+                          }`}
+                        >
+                          <span className={`material-symbols-outlined text-sm ${details.service === item.label ? "text-[#100287]" : "text-slate-400"}`}>
+                            pin_drop
+                          </span>
+                          <span className={`text-[11px] font-black uppercase tracking-tight ${details.service === item.label ? "text-slate-900" : "text-slate-600"}`}>
+                            {item.label}
+                          </span>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
 
-              <div>
-                <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 ml-1">Select Meeting Point</label>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                  {serviceOptions.map((svc) => (
-                    <button
-                      key={svc.id}
-                      type="button"
-                      onClick={() => setDetails({ ...details, service: svc.label, amount: svc.amount })}
-                      className={`flex items-center justify-between p-4 rounded-2xl border-2 transition-all text-left ${details.service === svc.label ? 'border-[#100287] bg-blue-50' : 'border-slate-100 bg-white hover:border-slate-200'}`}
-                    >
-                      <div className="flex items-center gap-3">
-                        <span className={`material-symbols-outlined text-sm ${details.service === svc.label ? 'text-[#100287]' : 'text-[#E7B036]'}`}>{svc.icon}</span>
-                        <span className={`text-[11px] font-black uppercase tracking-tight ${details.service === svc.label ? 'text-[#100287]' : 'text-slate-600'}`}>{svc.label}</span>
-                      </div>
-                      {svc.amount > 0 && <span className="text-[10px] font-black text-slate-400">{formatNaira(svc.amount)}</span>}
-                    </button>
-                  ))}
-                </div>
-              </div>
+                  {/* Return Trip: Drop-off Destination & Price */}
+                  <div>
+                    <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 ml-1">
+                      Select Drop-off Destination *
+                    </label>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                      {returnPricingOptions.map((svc) => (
+                        <button
+                          key={svc.id}
+                          type="button"
+                          onClick={() => setDetails({ ...details, destination: svc.label, amount: svc.amount })}
+                          className={`flex items-center justify-between p-4 rounded-2xl border-2 transition-all text-left ${
+                            details.destination === svc.label
+                              ? "border-[#100287] bg-blue-50"
+                              : "border-slate-100 bg-white hover:border-slate-200"
+                          }`}
+                        >
+                          <div className="flex items-center gap-3">
+                            <span className={`material-symbols-outlined text-sm ${details.destination === svc.label ? "text-[#100287]" : "text-[#100287]/60"}`}>
+                              {svc.icon || "location_on"}
+                            </span>
+                            <span className={`text-[11px] font-black uppercase tracking-tight ${details.destination === svc.label ? "text-[#100287]" : "text-slate-600"}`}>
+                              {svc.label}
+                            </span>
+                          </div>
+                          {svc.amount > 0 && (
+                            <span className="text-[10px] font-black text-slate-400">
+                              {formatNaira(svc.amount)}
+                            </span>
+                          )}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </>
+              ) : (
+                <>
+                  {/* Outgoing Trip: Destination */}
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 ml-1">Destination *</label>
+                      <select
+                        required
+                        value={details.destination}
+                        onChange={(e) => setDetails({ ...details, destination: e.target.value })}
+                        className="w-full bg-slate-50 border border-slate-100 px-6 py-4 rounded-2xl outline-none focus:ring-4 focus:ring-blue-100 focus:border-[#100287] transition-all font-bold text-slate-700 cursor-pointer appearance-none"
+                      >
+                        <option value="Campus Gate">Campus Gate</option>
+                        <option value="Hostels on Campus">Hostels on Campus</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  {/* Outgoing Trip: Meeting Point & Price */}
+                  <div>
+                    <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 ml-1">Select Meeting Point</label>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                      {serviceOptions.map((svc) => (
+                        <button
+                          key={svc.id}
+                          type="button"
+                          onClick={() => setDetails({ ...details, service: svc.label, amount: svc.amount })}
+                          className={`flex items-center justify-between p-4 rounded-2xl border-2 transition-all text-left ${details.service === svc.label ? 'border-[#100287] bg-blue-50' : 'border-slate-100 bg-white hover:border-slate-200'}`}
+                        >
+                          <div className="flex items-center gap-3">
+                            <span className={`material-symbols-outlined text-sm ${details.service === svc.label ? 'text-[#100287]' : 'text-[#E7B036]'}`}>{svc.icon}</span>
+                            <span className={`text-[11px] font-black uppercase tracking-tight ${details.service === svc.label ? 'text-[#100287]' : 'text-slate-600'}`}>{svc.label}</span>
+                          </div>
+                          {svc.amount > 0 && <span className="text-[10px] font-black text-slate-400">{formatNaira(svc.amount)}</span>}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </>
+              )}
 
 
 
@@ -407,11 +536,15 @@ export default function CheckoutPortal({ onClose }: { onClose?: () => void }) {
                     <span className="text-sm font-black text-slate-900 md:text-right w-full md:w-auto">{details.name}</span>
                   </div>
                   <div className="flex flex-col md:flex-row md:items-center justify-between border-b border-slate-200 pb-4 gap-1 md:gap-0">
-                    <span className="text-xs font-black text-slate-400 uppercase tracking-widest">Meeting Point</span>
+                    <span className="text-xs font-black text-slate-400 uppercase tracking-widest">
+                      {tripDirection === "from_campus" ? "Pickup Point" : "Meeting Point"}
+                    </span>
                     <span className="text-sm font-black text-slate-900 md:text-right w-full md:w-auto">{details.service}</span>
                   </div>
                   <div className="flex flex-col md:flex-row md:items-center justify-between border-b border-slate-200 pb-4 gap-1 md:gap-0">
-                    <span className="text-xs font-black text-slate-400 uppercase tracking-widest">Destination</span>
+                    <span className="text-xs font-black text-slate-400 uppercase tracking-widest">
+                      {tripDirection === "from_campus" ? "Drop-off Destination" : "Destination"}
+                    </span>
                     <span className="text-sm font-black text-slate-900 md:text-right w-full md:w-auto">{details.destination}</span>
                   </div>
                   <div className="flex flex-col md:flex-row md:items-center justify-between border-b border-slate-200 pb-4 gap-1 md:gap-0">
