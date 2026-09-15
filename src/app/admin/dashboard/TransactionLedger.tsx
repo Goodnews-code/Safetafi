@@ -40,15 +40,58 @@ export default function TransactionLedger({
 }: TransactionLedgerProps) {
   const [filteredStats, setFilteredStats] = useState<StatTransaction[] | Transaction[]>(allTransactions);
   const [isAllTime, setIsAllTime] = useState(true);
+  const [visibleTransactions, setVisibleTransactions] = useState<Transaction[]>(recentTransactions);
+  const [exporting, setExporting] = useState(false);
 
   const handleFilteredChange = useCallback((transactions: Transaction[], isAll: boolean) => {
     setIsAllTime(isAll);
+    setVisibleTransactions(transactions);
     if (isAll) {
       setFilteredStats(allTransactions);
     } else {
       setFilteredStats(transactions);
     }
   }, [allTransactions]);
+
+  const handleExport = useCallback(() => {
+    if (!visibleTransactions || visibleTransactions.length === 0) {
+      alert("No data to export.");
+      return;
+    }
+    setExporting(true);
+    try {
+      const headers = ["Customer", "Phone", "Email", "Meeting Point", "Destination", "Schedule", "Amount (NGN)", "Status", "Reference", "Transaction Date"];
+      const rows = visibleTransactions.map((tr) => [
+        `"${tr.customer_name || 'Anonymous'}"`,
+        `"${tr.phone || 'N/A'}"`,
+        `"${tr.email || 'N/A'}"`,
+        `"${tr.service || 'Logistics'}"`,
+        `"${tr.destination || 'N/A'}"`,
+        `"${tr.date || 'N/A'}"`,
+        tr.amount || 0,
+        tr.status?.toUpperCase() || 'UNKNOWN',
+        `"${tr.reference}"`,
+        `"${new Date(tr.created_at || tr.paid_at).toLocaleString()}"`
+      ]);
+      const csvContent = [headers.join(","), ...rows.map((row) => row.join(","))].join("\n");
+      const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.setAttribute("href", url);
+      const label = isAllTime ? "all" : "filtered";
+      link.setAttribute("download", `safetafi_ledger_${label}_${new Date().toISOString().split('T')[0]}.csv`);
+      link.style.visibility = "hidden";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    } catch (err) {
+      console.error("Export failed:", err);
+      alert("Failed to export data.");
+    } finally {
+      setExporting(false);
+    }
+  }, [visibleTransactions, isAllTime]);
 
   // Calculate Global or Filtered Stats
   const stats = useMemo(() => {
@@ -72,6 +115,25 @@ export default function TransactionLedger({
 
   return (
     <div className="space-y-8">
+      {/* Export Bar */}
+      <div className="flex items-center justify-between">
+        <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
+          {isAllTime
+            ? `All ${visibleTransactions.length} transactions`
+            : `${visibleTransactions.length} filtered transaction${visibleTransactions.length !== 1 ? 's' : ''}`}
+        </p>
+        <button
+          onClick={handleExport}
+          disabled={exporting || visibleTransactions.length === 0}
+          className="bg-[#0047BB] text-white px-5 py-2.5 rounded-xl text-xs font-black shadow-lg shadow-blue-600/20 hover:bg-[#001B44] transition-all flex items-center gap-2 active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed"
+        >
+          <span className={`material-symbols-outlined text-base ${exporting ? 'animate-spin' : ''}`}>
+            {exporting ? 'progress_activity' : 'download'}
+          </span>
+          {exporting ? 'Preparing...' : `Export ${isAllTime ? 'All' : 'Filtered'} CSV`}
+        </button>
+      </div>
+
       {/* Statistics Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
         {/* Revenue Card */}
